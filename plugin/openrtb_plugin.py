@@ -110,7 +110,7 @@ class OpenRTBPlugin(ParameterPlugin):
     def __send_click_notification(self, url):
         
         # Only generate clicks for the 2% of the cases
-        if random.random < 0.98:
+        if random.random() < 0.98:
             return
         
         parsed_url = urlparse(url)
