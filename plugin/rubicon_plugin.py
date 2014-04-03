@@ -45,7 +45,7 @@ class RubiconPlugin(ParameterPlugin):
         self.request_templates = []
         self.aid = None 
 
-    def initialize(self, adserver):
+    def initialize(self, adserver, config):
         self.adserver = adserver
         for name in REQUEST_FILES:
             with open(os.path.join(BASE_PATH, name), 'rb') as f:

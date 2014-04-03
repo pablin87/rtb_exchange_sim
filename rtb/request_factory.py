@@ -18,13 +18,13 @@ class RTBRequestFactory(object):
         # read the template file        
         self.template = Template(filename=self.template_file)
     
-    def set_parameter_plug(self, plugin, adserver):
+    def set_parameter_plug(self, plugin, adserver, config):
         '''
             Set a param class plugin, this must implement
             the ParameterPlugin interface
         '''
         self.plugin_instance = plugin()
-        self.plugin_instance.initialize(adserver)
+        self.plugin_instance.initialize(adserver, config)
 
     def create_request(self, set_aid=True):
         '''

@@ -5,17 +5,6 @@ import json
 import logging
 from urlparse import urlparse
 
-# CONFIG (see to put this in any other part; aka not global)
-from render_utils import incrementor
-RENDER_MAP = {
-              'auction_id' : incrementor(12345678)}
-BODY_TEMPLATES = ['plugin/mopub/mopub_body1.tmpl', 
-                  'plugin/mopub/mopub_body2.tmpl']
-HEH_ENDPOINT_TMPL = "http://localhost:8080/impression/${exchange}/${AUCTION_ID}/${AUCTION_PRICE}?impid=${AUCTION_IMP_ID}"
-AD_SERVER_ENDPOINT_TMPL = "http://localhost:8080/events?ev=imp&aid=${AUCTION_ID}&apr=${AUCTION_PRICE}&sptid=${AUCTION_IMP_ID}"
-USE_HEH_ENDPOINT = False
-HTTP_RESOURCE = 'mopub'
-
 
 class OpenRTBPlugin(ParameterPlugin):
     '''
@@ -24,34 +13,42 @@ class OpenRTBPlugin(ParameterPlugin):
     def __init__(self):
         self.request_body_templates = []
         self.render_map = {}
-        self.tmpl_notif = ''
+        self.tmpl_imp_notif = ''
     
-    def initialize(self, adserver):
+    def initialize(self, adserver, config):
         
         self.adserver = adserver
+        self.http_resource = config['http_resource']
+        self.exchange = config['exchange']
         
-        self.render_map = RENDER_MAP
-        self.request_body_templates_files = BODY_TEMPLATES
+        # Map to render the bid request body templates
+        self.render_map = config['render_map']
         
-        # Create templates...
+        # Create templates fot the bid requests...
+        self.request_body_templates_files = config['req_body_templates']
         for filename in self.request_body_templates_files:
             with open(filename) as f:
                 logging.info('Using file template %s' % filename)
                 tmpl = Template(''.join(f.readlines()))
                 self.request_body_templates.append(tmpl)
         
-        # Template for notification endpoint
-        if USE_HEH_ENDPOINT :
-            self.tmpl_notif_file = HEH_ENDPOINT_TMPL
+        # Templates for notification endpoint
+        if config['use_heh_endpoint'] :
+            self.tmpl_imp_notif_file = config['heh_endpt_imp_tmpl']
+            self.tmpl_click_notif_file = config['heh_endpt_click_tmpl']
         else :
-            self.tmpl_notif_file = AD_SERVER_ENDPOINT_TMPL
-        self.tmpl_notif = Template(self.tmpl_notif_file)
+            self.tmpl_imp_notif_file = config['adserver_endpt_imp_tmpl']
+            self.tmpl_click_notif_file = config['adserver_endpt_click_tmpl']
+        
+        # Create the templates for the notifications
+        self.tmpl_imp_notif = Template(self.tmpl_imp_notif_file)
+        self.tmpl_click_notif = Template(self.tmpl_click_notif_file)
 
     def get_request(self):
-        # We need to return a request line, a map of headers and a body string
+        # We need to return a request line, a map of headers and a body
         
         # Create the request line
-        req_line = 'POST /%s HTTP/1.1' % HTTP_RESOURCE
+        req_line = 'POST /%s HTTP/1.1' % self.http_resource
         
         # Set the headers
         headers = {}
@@ -81,19 +78,53 @@ class OpenRTBPlugin(ParameterPlugin):
         js = json.loads(body)
         logging.debug("Response received :")
         logging.debug(str(js))
-        price = js['seatbid'][0]['bid'][0]['price']
-        auction_id = js['id']
-        spot_id = js['seatbid'][0]['bid'][0]['impid']
+        price = self.get_auction_price(js)
+        auction_id = self.get_auction_id(js)
+        spot_id = self.get_auction_impression_id(js)
         
         # With that data, create the notification...
         notif_render = { 'AUCTION_PRICE' : price,
                          'AUCTION_ID' : auction_id,
                          'AUCTION_IMP_ID' : spot_id,
-                         'exchange' : 'mopub'}
-        url = self.tmpl_notif.substitute(notif_render)
+                         'exchange' : self.exchange }
+        
+        # Win notification...
+        url = self.tmpl_imp_notif.substitute(notif_render)
         self.__send_impression_notification(url)
+        
+        # Click notification... 
+        click_url = self.tmpl_click_notif.substitute(notif_render)
+        self.__send_click_notification(click_url)
+        
         return (False, '', {}, '')
         
+    def get_auction_price(self, json_response):
+        return json_response['seatbid'][0]['bid'][0]['price']
+
+    def get_auction_id(self, json_response):
+        return json_response['id']
+
+    def get_auction_impression_id(self, json_response):
+        return json_response['seatbid'][0]['bid'][0]['impid']
+
+    def __send_click_notification(self, url):
+        
+        # Only generate clicks for the 2% of the cases
+        if random.random < 0.98:
+            return
+        
+        parsed_url = urlparse(url)
+        req_line = 'GET %s?%s HTTP/1.1' % (parsed_url.path,
+                                           parsed_url.query)
+        headers = {}
+        headers['Host'] = 'localhost'
+        heads = self.__headers_to_str(headers)
+        buf = '%s\r\n%s\r\n' % (req_line, heads)
+        
+        # send the impression event in 0.1 secs
+        logging.debug("Sending click notification :")
+        logging.debug(buf)
+        self.adserver.send_event(buf, 0.1)
         
     def __send_impression_notification(self, url):
         parsed_url = urlparse(url)
@@ -105,7 +136,7 @@ class OpenRTBPlugin(ParameterPlugin):
         buf = '%s\r\n%s\r\n' % (req_line, heads)
         
         # send the impression event in 0.1 secs
-        logging.debug("Sending notification :")
+        logging.debug("Sending impression notification :")
         logging.debug(buf)
         self.adserver.send_event(buf, 0.1)
         
@@ -115,9 +146,8 @@ class OpenRTBPlugin(ParameterPlugin):
             heads += '%s: %s\r\n' % (k, v)
         return heads
 
-
     def receive_win_response(self, status_code, headers, body):
         logging.debug('received_win_response')
 
     def do(self, watcher, revents):
-        logging.info('doing...')
+        logging.debug('doing...')

@@ -14,7 +14,7 @@ from utils import Worker, WorkerPool, Connection, NONBLOCKING
 from settings import MAX_CONNS, MAX_EVENT_CONNS, CHECK_CONNS_TO, CHECK_PENDING_TO, \
                     TEMPLATE_FILENAME, EVENT_ENDPOINT, PARAMETER_PLUGIN, \
                     KEEP_ALIVE_HTTP_REQUEST, EVENT_CONN_KEEP_ALIVE_TO, \
-                    PLUGIN_DO_TO, REPORT_WINS
+                    PLUGIN_DO_TO, REPORT_WINS, PLUGIN_CONFIG
 
 from rtb import RTBRequestFactory
 from adserver import AdServer
@@ -78,7 +78,9 @@ class Exchange(object):
                                     TEMPLATE_FILENAME)
         self.adserver = AdServer(self.loop)
         self.request_fact.initialize()
-        self.request_fact.set_parameter_plug(PARAMETER_PLUGIN, self.adserver)
+        self.request_fact.set_parameter_plug(PARAMETER_PLUGIN, 
+                                             self.adserver,
+                                             PLUGIN_CONFIG)
         if PLUGIN_DO_TO:
             self.watchers.append(pyev.Timer(
                                     PLUGIN_DO_TO, 

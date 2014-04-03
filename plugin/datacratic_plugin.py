@@ -15,7 +15,7 @@ class DatacraticPlugin(ParameterPlugin):
     def __init__(self):
         self.aid = None
 
-    def initialize(self, adserver):
+    def initialize(self, adserver, config):
         self.adserver = adserver
 
     def get_request(self):

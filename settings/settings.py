@@ -3,6 +3,7 @@ import logging
 # Plugin imports
 from plugin.rubicon_plugin import RubiconPlugin
 from plugin.datacratic_plugin import DatacraticPlugin
+from plugin.openrtb_plugin import OpenRTBPlugin
 
 # Max connections for bid requests allowed for the process
 MAX_CONNS = 1
@@ -13,12 +14,12 @@ MAX_EVENT_CONNS = 1
 #  - endpoint should be a string 'host:port'
 #  - expected_qps is the amount of qps expected for the endpoint
 ENDPOINT_LIST = [
-    ('localhost:12339', 100),
+    ('10.0.2.21:12340', 20),
 ]
 
 # Event endpoint :
 # - endpoint should be a string 'host:port'
-EVENT_ENDPOINT = 'localhost:12340'
+EVENT_ENDPOINT = '10.0.2.21:12350'
 
 # Balance time out indicating the period in seconds 
 # to balance connections
@@ -33,7 +34,7 @@ CHECK_PENDING_TO = 1
 
 # Timeout in seconds to periodically invoke the plugin.do method
 # set to None if it does not need to be invoked
-PLUGIN_DO_TO = 2
+PLUGIN_DO_TO = 10
 
 # Report wps statistics
 REPORT_WINS = False
@@ -53,10 +54,15 @@ KEEP_ALIVE_HTTP_REQUEST = \
 # - logging.INFO
 # - logging.WARNING
 # - logging.ERROR
-LOG_LEVEL = logging.INFO
+LOG_LEVEL = logging.DEBUG
 
 # Parameter plugin
-PARAMETER_PLUGIN = RubiconPlugin
+#PARAMETER_PLUGIN = RubiconPlugin
+PARAMETER_PLUGIN = OpenRTBPlugin
+
+# Configuration map that will be passed in the initialize 
+import mopub_config 
+PLUGIN_CONFIG = mopub_config.conf
 
 # RTB request template filename
 TEMPLATE_FILENAME = 'templates/request.template'
