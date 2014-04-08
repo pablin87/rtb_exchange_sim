@@ -35,6 +35,19 @@ class TestTagParsing(unittest.TestCase):
         parsed_url = tag_parsing.get_click_url(adm, '192.168.1.2', '4545')
         self.assertEqual(click_url, parsed_url)
 
+    def test_tag_parsing_click_url_source(self):
+        adm = "<noscript><a href='http://localhost:8080/click/rubicon/${AUCTION_ID}?'><img src='http://i.ytimg.com/vi/mmiyJIN0LbU/mqdefault.jpg'></a></noscript><img src='http://localhost:8080/impression/rubicon/${AUCTION_ID}/${AUCTION_PRICE}?crid=315&fid=266&cid=81&platform_id=%{bidrequest.device.os}&region_code=%{bidrequest.location.regionCode}&postal_code=%{bidrequest.location.postalCode}&country_code=%{bidrequest.location.countryCode}&site_id=%{bidrequest.site.id}&app_id=%{bidrequest.app.id}&carrier_id=%{bidrequest.device.carrier}&device_id=%{bidrequest.device.dpidsha1}'/><img src='http://wac.450f.edgecastcdn.net/80450F/comicsalliance.com/files/2011/06/foreverc.jpg'/>"
+        click_source = '/click/rubicon/${AUCTION_ID}?'
+        
+        parsed_source = tag_parsing.get_click_url_source(adm)
+        self.assertEqual(click_source, parsed_source)
+    
+    def test_tag_parsing_impression_url_source(self):
+        adm = "<noscript><a href='http://localhost:8080/click/rubicon/${AUCTION_ID}?'><img src='http://i.ytimg.com/vi/mmiyJIN0LbU/mqdefault.jpg'></a></noscript><img src='http://localhost:8080/impression/rubicon/${AUCTION_ID}/${AUCTION_PRICE}?crid=315&fid=266&cid=81&platform_id=%{bidrequest.device.os}&region_code=%{bidrequest.location.regionCode}&postal_code=%{bidrequest.location.postalCode}&country_code=%{bidrequest.location.countryCode}&site_id=%{bidrequest.site.id}&app_id=%{bidrequest.app.id}&carrier_id=%{bidrequest.device.carrier}&device_id=%{bidrequest.device.dpidsha1}'/><img src='http://wac.450f.edgecastcdn.net/80450F/comicsalliance.com/files/2011/06/foreverc.jpg'/>"
+        imp_source = '/impression/rubicon/${AUCTION_ID}/${AUCTION_PRICE}?crid=315&fid=266&cid=81&platform_id=%{bidrequest.device.os}&region_code=%{bidrequest.location.regionCode}&postal_code=%{bidrequest.location.postalCode}&country_code=%{bidrequest.location.countryCode}&site_id=%{bidrequest.site.id}&app_id=%{bidrequest.app.id}&carrier_id=%{bidrequest.device.carrier}&device_id=%{bidrequest.device.dpidsha1}'
+        
+        parsed_source = tag_parsing.get_impression_url_source(adm)
+        self.assertEqual(imp_source, parsed_source)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
