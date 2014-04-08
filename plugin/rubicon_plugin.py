@@ -126,9 +126,7 @@ class RubiconPlugin(ParameterPlugin):
         if not click:
             return (False, '', {}, '')
         url_path = tag_parsing.get_click_url_source(adm)
-
         url_path = url_path.replace('${AUCTION_ID}', aid)
-        url_path = url_path.replace('http://10.0.2.11:12340','')
         click_req_line = 'GET %s HTTP/1.1' % url_path
         #click_req_line = 'GET /events?ev=cli&aid=%s HTTP/1.1' % aid
         buf_click = '%s\r\n%s\r\n' % (click_req_line, heads)
