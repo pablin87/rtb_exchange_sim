@@ -3,7 +3,7 @@ Created on Mar 17, 2014
 
 @author: pablob
 '''
-
+import random
 
 def incrementor(seed):
     # Return a function that when it is call the first time returns the seed 
@@ -17,3 +17,10 @@ def incrementor(seed):
             i = i + 1
     inc = _infinit_incr(seed)
     return lambda : inc.next()
+
+def random_id():
+    def _random():
+        while True:
+            yield random.randint(1000000, 999999999)
+    ran = _random()
+    return lambda : ran.next()

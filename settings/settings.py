@@ -14,12 +14,12 @@ MAX_EVENT_CONNS = 1
 #  - endpoint should be a string 'host:port'
 #  - expected_qps is the amount of qps expected for the endpoint
 ENDPOINT_LIST = [
-    ('10.0.2.21:12340', 20),
+    ('localhost:12341', 20),
 ]
 
 # Event endpoint :
 # - endpoint should be a string 'host:port'
-EVENT_ENDPOINT = '10.0.2.21:12350'
+EVENT_ENDPOINT = 'localhost:12340'
 
 # Balance time out indicating the period in seconds 
 # to balance connections
@@ -54,7 +54,7 @@ KEEP_ALIVE_HTTP_REQUEST = \
 # - logging.INFO
 # - logging.WARNING
 # - logging.ERROR
-LOG_LEVEL = logging.DEBUG
+LOG_LEVEL = logging.INFO
 
 # Parameter plugin
 #PARAMETER_PLUGIN = RubiconPlugin

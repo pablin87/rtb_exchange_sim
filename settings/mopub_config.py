@@ -1,4 +1,4 @@
-from render_utils import incrementor
+from render_utils import random_id
 
 conf = {
         
@@ -18,7 +18,7 @@ conf = {
         # 'req_body_templates' field. For example to return a constant value 
         # 'auction_id' : lambda : 5   (will return always five)
         'render_map' : {
-                        'auction_id' : incrementor(12345678)
+                        'auction_id' : random_id()
                         },
         
         # Definde what resource of the exchange connector endpoint is hitted
