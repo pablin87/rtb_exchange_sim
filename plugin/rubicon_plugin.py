@@ -5,6 +5,8 @@ import json
 import os
 import datetime
 
+import tag_parsing
+
 WIN_PROBABILITY   = 5
 CLICK_PROBABILITY = 10
 
@@ -93,24 +95,19 @@ class RubiconPlugin(ParameterPlugin):
         logging.debug('plugin.rubicon : adm %s' % adm)
         #adm = adm.translate(None,'\\')
         logging.debug('plugin.rubicon : translation %s' % adm)
-        idx = adm.find('http://10.0.2.11:12340/impression/rubicon')
-        url = ''
-        for i in range(idx, len(adm)):
-            if adm[i] != '"':
-                url += adm[i]
-            else:
-                break
-        url = url.replace('${AUCTION_ID}', aid)
-        url = url.replace('${AUCTION_PRICE:BF}', 'A8026991338B87A4')
-        path = url.replace('http://10.0.2.11:12340','')
-        logging.debug('plugin.rubicon : url translation %s' % path)
+        
+        url_path = tag_parsing.get_impression_url_source(adm)
+        url_path = url_path.replace('${AUCTION_ID}', aid)
+        url_path = url_path.replace('${AUCTION_PRICE:BF}', 'A8026991338B87A4')
+
+        logging.debug('plugin.rubicon : url translation %s' % url_path)
         # we won, we need to return True with all
         # all the data used to construct the win
         # notification
         logging.debug('plugin.rubicon : sending win for %s' % aid)
         #req_line = 'GET /events?ev=imp&apr=03903E5BECC5F1E4' \
         #            '&aid=%s HTTP/1.1' % aid
-        req_line = 'GET %s HTTP/1.1' % path
+        req_line = 'GET %s HTTP/1.1' % url_path
         headers = {}
         headers['Host'] = 'localhost'
         headers['Content-Type'] = 'application/json'
@@ -128,16 +125,9 @@ class RubiconPlugin(ParameterPlugin):
         click = random.randint(0, 100) < CLICK_PROBABILITY
         if not click:
             return (False, '', {}, '')
-        idx = adm.find('http://10.0.2.11:12340/click/rubicon')
-        url = ''
-        for i in range(idx, len(adm)):
-            if adm[i] != '"':
-                url += adm[i]
-            else:
-                break
-        url = url.replace('${AUCTION_ID}', aid)
-        path = url.replace('http://10.0.2.11:12340','')
-        click_req_line = 'GET %s HTTP/1.1' % path
+        url_path = tag_parsing.get_click_url_source(adm)
+        url_path = url_path.replace('${AUCTION_ID}', aid)
+        click_req_line = 'GET %s HTTP/1.1' % url_path
         #click_req_line = 'GET /events?ev=cli&aid=%s HTTP/1.1' % aid
         buf_click = '%s\r\n%s\r\n' % (click_req_line, heads)
         self.adserver.send_event(buf_click, 1.8)
