@@ -33,7 +33,8 @@ class OpenRTBPlugin(ParameterPlugin):
                 self.request_body_templates.append(tmpl)
         
         # Templates for notification endpoint
-        if config['use_heh_endpoint'] :
+        self.use_heh_endpoint = config['use_heh_endpoint']
+        if self.use_heh_endpoint :
             self.tmpl_imp_notif_file = config['heh_endpt_imp_tmpl']
             self.tmpl_click_notif_file = config['heh_endpt_click_tmpl']
         else :
@@ -99,7 +100,15 @@ class OpenRTBPlugin(ParameterPlugin):
         return (False, '', {}, '')
         
     def get_auction_price(self, json_response):
-        return json_response['seatbid'][0]['bid'][0]['price']
+        if self.use_heh_endpoint:
+            return json_response['seatbid'][0]['bid'][0]['price']
+        else :
+            # The value must be in Micro USD per one impression and it came in
+            # CPM USD. That is the way the generic adserver expects it.
+            price = float(json_response['seatbid'][0]['bid'][0]['price'])
+            price = price * 1000000 # now micro USD CPM
+            price = int(price / 1000) # CPM(1000 impressions) to 1 impression
+            return str(price)
 
     def get_auction_id(self, json_response):
         return json_response['id']
@@ -151,3 +160,4 @@ class OpenRTBPlugin(ParameterPlugin):
 
     def do(self, watcher, revents):
         logging.debug('doing...')
+
