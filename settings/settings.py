@@ -61,8 +61,10 @@ LOG_LEVEL = logging.INFO
 PARAMETER_PLUGIN = OpenRTBPlugin
 
 # Configuration map that will be passed in the initialize 
-import mopub_config 
-PLUGIN_CONFIG = mopub_config.conf
+import mopub_config
+import nexage_config 
+#PLUGIN_CONFIG = mopub_config.conf
+PLUGIN_CONFIG = nexage_config.conf
 
 # RTB request template filename
 TEMPLATE_FILENAME = 'templates/request.template'
