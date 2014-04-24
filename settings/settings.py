@@ -6,20 +6,20 @@ from plugin.datacratic_plugin import DatacraticPlugin
 from plugin.openrtb_plugin import OpenRTBPlugin
 
 # Max connections for bid requests allowed for the process
-MAX_CONNS = 1
+MAX_CONNS = 4
 # Amount of connections for event notification allowed for the process
-MAX_EVENT_CONNS = 1
+MAX_EVENT_CONNS = 4
 
 # Endpoint list containing tuples for the DSPs (endpoint, expected_qps) where :
 #  - endpoint should be a string 'host:port'
 #  - expected_qps is the amount of qps expected for the endpoint
 ENDPOINT_LIST = [
-    ('localhost:12341', 20),
+    ('54.84.114.67:12342', 20),
 ]
 
 # Event endpoint :
 # - endpoint should be a string 'host:port'
-EVENT_ENDPOINT = 'localhost:12340'
+EVENT_ENDPOINT = '54.84.114.67:12340'
 
 # Balance time out indicating the period in seconds 
 # to balance connections

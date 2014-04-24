@@ -9,6 +9,7 @@ conf = {
         # This define the body templates that are being sent to the rtbkit
         # exchange connector endpoint (files).
         'req_body_templates' : [ 
+                                'plugin/nexage/nexage_body_onlybanner.tmpl',
                                 'plugin/nexage/nexage_body1.tmpl', 
                                 'plugin/nexage/nexage_body2.tmpl',
                                 'plugin/nexage/nexage_body3.tmpl'
