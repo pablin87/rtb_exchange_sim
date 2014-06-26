@@ -106,7 +106,8 @@ class AdxPlugin(ParameterPlugin):
             return (False, '', {}, '')
         
         # Extract data from bid response
-        bid_resp = adxproto.BidResponse.ParseFromString(body)
+        bid_resp = adxproto.BidResponse()
+        bid_resp.ParseFromString(body)
         logging.debug("adx bid response received :")
         logging.debug(str(bid_resp))
         if len(bid_resp.ad) == 0:
