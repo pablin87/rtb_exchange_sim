@@ -77,8 +77,8 @@ class AdxPlugin(ParameterPlugin):
         # Generate payload...
         br = self.generator.GenerateBidRequest()
         payload = br.SerializeToString()
-        logging.debug("adx payload generated %s len(%d)" % (payload, 
-                                                            len(payload)))
+        logging.debug("adx generated :")
+        logging.debug(str(br))
         
         # Set the header size
         headers['Content-Length'] = len(payload)
@@ -107,6 +107,8 @@ class AdxPlugin(ParameterPlugin):
         
         # Extract data from bid response
         bid_resp = adxproto.BidResponse.ParseFromString(body)
+        logging.debug("adx bid response received :")
+        logging.debug(str(bid_resp))
         if len(bid_resp.ad) == 0:
             logging.debug("No add received")
             return (False, '', {}, '')
@@ -140,13 +142,22 @@ class AdxPlugin(ParameterPlugin):
             self.do_event_from_templates(notif_render_map)
 
     def do_event_from_html_snippet(self, bid_resp, notif_render_map):
-        
+        # Get the corresponding urls and set the price to the imp url
+
         tag = bid_resp.ad[0].html_snippet
+
+        price = notif_render_map['AUCTION_PRICE']
         imp_url = tag_parsing.get_impression_url_source(tag)
-        clicl_url = tag_parsing.get_click_url_source(tag)
-        
+        imp_url = self.replace_price_macro(imp_url, price)
         self.__send_impression_notification(imp_url)
+        
+        # now for the click url
+        clicl_url = tag_parsing.get_click_url_source(tag)
         self.__send_click_notification(clicl_url)
+    
+    def replace_price_macro(self, imp_url, price):
+        PRICE_MACRO = "%%WINNING_PRICE%%"
+        return imp_url.replace(PRICE_MACRO, str(price))
     
     def do_event_from_templates(self, notif_render_map):
         # Win notification...
