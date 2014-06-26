@@ -4,12 +4,19 @@ Created on 24/06/2014
 @author: pablin
 '''
 import logging
-from parameter_plugin import ParameterPlugin
 from string import Template
+
+from parameter_plugin import ParameterPlugin
+import tag_parsing
+
 from adx.generator import RandomBidGeneratorWrapper
-from adx.generator import realtime_bidding_pb2 as adxproto
+from adx import realtime_bidding_pb2 as adxproto
+from adx.encryption.adx_encryption_utils import adx_encrypt_price
+
+
 import urlparse
 import random
+
 
 class AdxException(Exception): pass
 
@@ -28,7 +35,18 @@ class AdxPlugin(ParameterPlugin):
         self.adserver = adserver
         self.http_resource = config['http_resource']
         
+        self.enc_key = config['encryption_key']
+        self.int_key = config['integrity_key']
+        self.iv = config['initialization_vector']
+        
         self.generator = RandomBidGeneratorWrapper()
+        
+        self.use_html_snippet = config['use_html_snippet']
+        
+        if not self.use_html_snippet:
+            self.init_templates(config)
+
+    def init_templates(self, config):
         
         # Templates for notification endpoint
         self.use_heh_endpoint = config['use_heh_endpoint']
@@ -42,6 +60,7 @@ class AdxPlugin(ParameterPlugin):
         # Create the templates for the notifications
         self.tmpl_imp_notif = Template(self.tmpl_imp_notif_file)
         self.tmpl_click_notif = Template(self.tmpl_click_notif_file)
+
 
     def get_request(self):
         # We need to return a request line, a map of headers and a body
@@ -58,6 +77,8 @@ class AdxPlugin(ParameterPlugin):
         # Generate payload...
         br = self.generator.GenerateBidRequest()
         payload = br.SerializeToString()
+        logging.debug("adx payload generated %s len(%d)" % (payload, 
+                                                            len(payload)))
         
         # Set the header size
         headers['Content-Length'] = len(payload)
@@ -76,7 +97,8 @@ class AdxPlugin(ParameterPlugin):
         return br.ad[0].adslot[0].max_cpm_micros
 
     def get_auction_id(self, br):
-        pass
+        # For now only support html_snippet.
+        return tag_parsing.extract_auction_id(br.ad[0].html_snippet)
 
     def receive_response(self, status_code, headers, body):
         # If it is not a bid, do nothing
@@ -94,25 +116,47 @@ class AdxPlugin(ParameterPlugin):
             bid_price = self.get_bid_price(bid_resp)
             auction_id = self.get_auction_id(bid_resp)
             spot_id = 1
-
+            
+            # Encode the price...
+            enc_price = adx_encrypt_price(bid_price, self.enc_key,
+                                           self.int_key, self.iv)
+            
             # With that data, create the notification...
-            notif_render = { 'AUCTION_PRICE' : bid_price,
+            notif_render = { 'AUCTION_PRICE' : enc_price,
                             'AUCTION_ID' : auction_id,
                             'AUCTION_IMP_ID' : spot_id }
-
-            # Win notification...
-            url = self.tmpl_imp_notif.substitute(notif_render)
-            self.__send_impression_notification(url)
-        
-            # Click notification... 
-            click_url = self.tmpl_click_notif.substitute(notif_render)
-            self.__send_click_notification(click_url)
+            self.do_events(notif_render, bid_resp)
             
         except :
             logging.exception("Could not get bid response")
 
         return (False, '', {}, '')
+
+    def do_events(self, notif_render_map, bid_resp):
+        # This function is in charge of sending impressions and clicks
+        if self.use_html_snippet :
+            self.do_event_from_html_snippet(bid_resp, notif_render_map)
+        else :
+            self.do_event_from_templates(notif_render_map)
+
+    def do_event_from_html_snippet(self, bid_resp, notif_render_map):
         
+        tag = bid_resp.ad[0].html_snippet
+        imp_url = tag_parsing.get_impression_url_source(tag)
+        clicl_url = tag_parsing.get_click_url_source(tag)
+        
+        self.__send_impression_notification(imp_url)
+        self.__send_click_notification(clicl_url)
+    
+    def do_event_from_templates(self, notif_render_map):
+        # Win notification...
+        url = self.tmpl_imp_notif.substitute(notif_render_map)
+        self.__send_impression_notification(url)
+        
+        # Click notification... 
+        click_url = self.tmpl_click_notif.substitute(notif_render_map)
+        self.__send_click_notification(click_url)
+
         
     def get_auction_price(self, json_response):
         if self.use_heh_endpoint:
@@ -169,3 +213,4 @@ class AdxPlugin(ParameterPlugin):
 
     def do(self, watcher, revents):
         logging.debug('doing...')
+        

@@ -35,3 +35,12 @@ def get_impression_url_source(adm):
     links_list = adm.split('<')
     imp_link_line = [ line for line in links_list if 'impression' in line][0]
     return IMP_REGEX.sub('\g<url>', imp_link_line)
+
+def extract_auction_id(html_tag):
+    # The impression url from the adm or html tag looks like this:
+    # http://localhost:8080/impression/adx/${AUCTION_ID}/${AUCTION_PRICE}?(...)
+    # So get the impression url and from it get the auction id.
+    # This function should be used when the auction_id is replaced by ourself 
+    # and not by the exchange with the macro replacement. So, for Adx.
+    imp_url = get_impression_url_source(html_tag)
+    return imp_url.split('/')[3]

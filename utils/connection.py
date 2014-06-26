@@ -128,7 +128,7 @@ class Connection(object):
             self.state = Connection.STATE_CONNECTED
             if not self.buf :
                 self.buf += self.request_cb(self)
-            sent = self.sock.send(self.buf.encode('utf-8'))
+            sent = self.sock.send(self.buf)
         except socket.error as err:
             logging.error('handle_write ex')            
             if err.args[0] not in NONBLOCKING:

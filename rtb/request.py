@@ -23,7 +23,12 @@ class RTBRequest(object):
             hds += '%s: %s\r\n' % (k,v)
         hds += '\r\n%s' % self.body
         if not self.is_ascii(hds):
-            hds = unicode(hds, 'utf-8')
+            try :
+                hds = unicode(hds, 'utf-8')
+            except UnicodeDecodeError:
+                # no unicode, no ascii then it should be other type of payload 
+                # like binary from adx protocol buffer.
+                pass 
         logging.debug('rendering done %s' % type(hds))
         return hds
 

@@ -4,6 +4,7 @@ import logging
 from plugin.rubicon_plugin import RubiconPlugin
 from plugin.datacratic_plugin import DatacraticPlugin
 from plugin.openrtb_plugin import OpenRTBPlugin
+from plugin.adx_plugin import AdxPlugin
 
 # Max connections for bid requests allowed for the process
 MAX_CONNS = 4
@@ -14,12 +15,13 @@ MAX_EVENT_CONNS = 4
 #  - endpoint should be a string 'host:port'
 #  - expected_qps is the amount of qps expected for the endpoint
 ENDPOINT_LIST = [
-    ('54.84.114.67:12342', 20),
+    ('localhost:12342', 20),
 ]
 
 # Event endpoint :
 # - endpoint should be a string 'host:port'
-EVENT_ENDPOINT = '54.84.114.67:12340'
+EVENT_ENDPOINT = 'localhost:12340'
+#EVENT_ENDPOINT = 'localhost:8989'
 
 # Balance time out indicating the period in seconds 
 # to balance connections
@@ -58,13 +60,16 @@ LOG_LEVEL = logging.INFO
 
 # Parameter plugin
 #PARAMETER_PLUGIN = RubiconPlugin
-PARAMETER_PLUGIN = OpenRTBPlugin
+#PARAMETER_PLUGIN = OpenRTBPlugin
+PARAMETER_PLUGIN = AdxPlugin
 
 # Configuration map that will be passed in the initialize 
 import mopub_config
-import nexage_config 
+import nexage_config
+import adx_config
 #PLUGIN_CONFIG = mopub_config.conf
-PLUGIN_CONFIG = nexage_config.conf
+#PLUGIN_CONFIG = nexage_config.conf
+PLUGIN_CONFIG = adx_config.conf
 
 # RTB request template filename
 TEMPLATE_FILENAME = 'templates/request.template'

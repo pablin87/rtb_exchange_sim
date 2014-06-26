@@ -49,6 +49,13 @@ class TestTagParsing(unittest.TestCase):
         parsed_source = tag_parsing.get_impression_url_source(adm)
         self.assertEqual(imp_source, parsed_source)
 
+    def test_tag_parsing_extract_auction_id(self):
+        html_tag = "<noscript><a href='http://localhost:8080/click/adx/0123456789abcdef?'><img src='http://i.ytimg.com/vi/mmiyJIN0LbU/mqdefault.jpg'></a></noscript><img src='http://localhost:8080/impression/adx/0123456789abcdef/${AUCTION_PRICE}?crid=315&fid=266&cid=81&platform_id=%{bidrequest.device.os}&region_code=%{bidrequest.location.regionCode}&postal_code=%{bidrequest.location.postalCode}&country_code=%{bidrequest.location.countryCode}&site_id=%{bidrequest.site.id}&app_id=%{bidrequest.app.id}&carrier_id=%{bidrequest.device.carrier}&device_id=%{bidrequest.device.dpidsha1}'/><img src='http://wac.450f.edgecastcdn.net/80450F/comicsalliance.com/files/2011/06/foreverc.jpg'/>"
+        auction_id = '0123456789abcdef' 
+        
+        parsed_auction_id = tag_parsing.extract_auction_id(html_tag)
+        self.assertEqual(auction_id, parsed_auction_id)
+
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
