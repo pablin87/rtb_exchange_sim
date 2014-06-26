@@ -1,0 +1,3 @@
+[submodule "plugin/adx/encryption"]
+	path = plugin/adx/encryption
+	url = git@github.com:pablin87/adx-encryption.git
