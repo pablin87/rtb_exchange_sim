@@ -174,28 +174,28 @@ MOBILE_DEVICE_INFO = [
      'Mozilla/5.0 (Linux; U; Android 2.3.6; it-it; GT-S5570I Build/GINGERBREAD)'
      ' AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1 '
      '(Mobile; afma-sdk-a-v6.1.0),gzip(gfe)'),
-    ('android', 4, 1, 1, TABLET, True, False, LANDSCAPE, 728, 90,
-     'Mozilla/5.0 (Linux; U; Android 4.1.1; fr-ca; GT-P3113 Build/JRO03C) '
-     'AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30 (Mobile;'
-     ' afma-sdk-a-v6.1.0),gzip(gfe)'),
-    ('ipad', 6, 1, 2, TABLET, True, True, LANDSCAPE, 768, 1024,
-     'Mozilla/5.0 (iPad; CPU OS 6_1_2 like Mac OS X) AppleWebKit/536.26'
-     ' (KHTML, like Gecko) Mobile/10B146,gzip(gfe)'),
-    ('android', 4, 0, 4, PHONE, True, True, PORTRAIT, 360, 640,
-     'Mozilla/5.0 (Linux; U; Android 4.0.4; en-us; DROID BIONIC '
-     'Build/6.7.2-223_DBN_M4-23) AppleWebKit/534.30 (KHTML, like Gecko) '
-     'Version/4.0 Mobile Safari/534.30 (Mobile; afma-sdk-a-v6.2.1),gzip(gfe)'),
-    ('ipad', 5, 1, 1, TABLET, True, False, PORTRAIT, 468, 60,
-     'Mozilla/5.0 (iPad; CPU OS 5_1_1 like Mac OS X) AppleWebKit/534.46 (KHTML,'
-     'like Gecko) Mobile/9B206,gzip(gfe)'),
-    ('android', 2, 3, 5, PHONE, False, False, 0, 728, 90,
-     'Mozilla/5.0 (Linux; U; Android 2.3.5; en-us; DROID X2 Build/'
-     '4.5.1A-DTN-200-18) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 '
-     'Mobile Safari/533.1,gzip(gfe)'),
-    ('iphone', 4, 2, 1, PHONE, False, False, 0, 728, 90,
-     'Mozilla/5.0 (iPod; U; CPU iPhone OS 4_2_1 like Mac OS X; en-us) '
-     'AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8C148 '
-     'Safari/6533.18.5,gzip(gfe)'),
+#     ('android', 4, 1, 1, TABLET, True, False, LANDSCAPE, 728, 90,
+#      'Mozilla/5.0 (Linux; U; Android 4.1.1; fr-ca; GT-P3113 Build/JRO03C) '
+#      'AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30 (Mobile;'
+#      ' afma-sdk-a-v6.1.0),gzip(gfe)'),
+#     ('ipad', 6, 1, 2, TABLET, True, True, LANDSCAPE, 768, 1024,
+#      'Mozilla/5.0 (iPad; CPU OS 6_1_2 like Mac OS X) AppleWebKit/536.26'
+#      ' (KHTML, like Gecko) Mobile/10B146,gzip(gfe)'),
+#     ('android', 4, 0, 4, PHONE, True, True, PORTRAIT, 360, 640,
+#      'Mozilla/5.0 (Linux; U; Android 4.0.4; en-us; DROID BIONIC '
+#      'Build/6.7.2-223_DBN_M4-23) AppleWebKit/534.30 (KHTML, like Gecko) '
+#      'Version/4.0 Mobile Safari/534.30 (Mobile; afma-sdk-a-v6.2.1),gzip(gfe)'),
+#     ('ipad', 5, 1, 1, TABLET, True, False, PORTRAIT, 468, 60,
+#      'Mozilla/5.0 (iPad; CPU OS 5_1_1 like Mac OS X) AppleWebKit/534.46 (KHTML,'
+#      'like Gecko) Mobile/9B206,gzip(gfe)'),
+#     ('android', 2, 3, 5, PHONE, False, False, 0, 728, 90,
+#      'Mozilla/5.0 (Linux; U; Android 2.3.5; en-us; DROID X2 Build/'
+#      '4.5.1A-DTN-200-18) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 '
+#      'Mobile Safari/533.1,gzip(gfe)'),
+#     ('iphone', 4, 2, 1, PHONE, False, False, 0, 728, 90,
+#      'Mozilla/5.0 (iPod; U; CPU iPhone OS 4_2_1 like Mac OS X; en-us) '
+#      'AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8C148 '
+#      'Safari/6533.18.5,gzip(gfe)'),
     ('blackberry', 9, 2, 20, PHONE, False, False, 0, 320, 50,
      'Mozilla/5.0 (BlackBerry; U; BlackBerry 9220; en) AppleWebKit/534.11+ '
      '(KHTML, like Gecko) Version/7.1.0.337 Mobile Safari/534.11+,gzip(gfe)')
@@ -204,7 +204,8 @@ NUM_MOBILE_DEVICES = len(MOBILE_DEVICE_INFO)
 ANDROID_APP_IDS = ['com.foo.bar', 'fus.ro.dah', 'test.app.id', 'a.b.c',
                    'com.one.two']
 IOS_APP_IDS = ['610434022', '4453712097', '530434022', '445275396', '610424031']
-MOBILE_VENDOR_TYPES = [423, 534]
+#MOBILE_VENDOR_TYPES = [423, 534]
+MOBILE_VENDOR_TYPES = [ 113 ]
 
 MAX_INCLUDED_VENDOR_TYPES = 10
 
@@ -220,6 +221,8 @@ INSTREAM_VIDEO_TYPES = [
 
 random.seed(time.time())
 
+def create_mobile_generator():
+    return MobileBidGenerator(None, None)
 
 class RandomBidGeneratorWrapper(object):
   """Generates random BidRequests."""

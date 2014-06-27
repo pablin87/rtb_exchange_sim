@@ -9,12 +9,12 @@ from string import Template
 from parameter_plugin import ParameterPlugin
 import tag_parsing
 
-from adx.generator import RandomBidGeneratorWrapper
+from adx.generator import RandomBidGeneratorWrapper, create_mobile_generator
 from adx import realtime_bidding_pb2 as adxproto
 from adx.encryption.adx_encryption_utils import adx_encrypt_price
 
 
-import urlparse
+from urlparse import urlparse
 import random
 
 
@@ -35,11 +35,12 @@ class AdxPlugin(ParameterPlugin):
         self.adserver = adserver
         self.http_resource = config['http_resource']
         
-        self.enc_key = config['encryption_key']
-        self.int_key = config['integrity_key']
-        self.iv = config['initialization_vector']
+        self.enc_key = config['encryption_key'].decode("hex")
+        self.int_key = config['integrity_key'].decode("hex")
+        self.iv = config['initialization_vector'].decode("hex")
         
-        self.generator = RandomBidGeneratorWrapper()
+        #self.generator = RandomBidGeneratorWrapper()
+        self.generator = create_mobile_generator()
         
         self.use_html_snippet = config['use_html_snippet']
         
@@ -85,7 +86,7 @@ class AdxPlugin(ParameterPlugin):
         
         return (req_line, headers, payload)
 
-    def get_bid_price(self, br):
+    def get_bid_price_in_cpi(self, br):
         if len(br.ad) == 0:
             raise AdxException("no br.ad")
         if not br.ad[0].HasField("html_snippet"):
@@ -94,11 +95,19 @@ class AdxPlugin(ParameterPlugin):
             raise AdxException("no adslot")
         if not br.ad[0].adslot[0].HasField('max_cpm_micros'):
             raise AdxException("no max_cpm_miocros")
-        return br.ad[0].adslot[0].max_cpm_micros
+        cpm_price = br.ad[0].adslot[0].max_cpm_micros
+        cpi_price = int(cpm_price / 1000)
+        return cpi_price
 
     def get_auction_id(self, br):
         # For now only support html_snippet.
         return tag_parsing.extract_auction_id(br.ad[0].html_snippet)
+
+    def get_spot_id(self, br):
+        # For now only support html_snippet.
+        if not br.ad[0].adslot[0].HasField('id'):
+            raise AdxException("No id ")
+        return br.ad[0].adslot[0].id
 
     def receive_response(self, status_code, headers, body):
         # If it is not a bid, do nothing
@@ -116,16 +125,19 @@ class AdxPlugin(ParameterPlugin):
         
         logging.debug("Response received")
         try :
-            bid_price = self.get_bid_price(bid_resp)
+            bid_price = self.get_bid_price_in_cpi(bid_resp)
             auction_id = self.get_auction_id(bid_resp)
-            spot_id = 1
+            spot_id = self.get_spot_id(bid_resp)
             
-            # Encode the price...
-            enc_price = adx_encrypt_price(bid_price, self.enc_key,
-                                           self.int_key, self.iv)
+            # Encode the price if we do not hit the adserver directly
+            if self.use_html_snippet or self.use_heh_endpoint:
+                bid_price = adx_encrypt_price(bid_price, self.enc_key,
+                                              self.int_key, self.iv)
+            else :
+                bid_price = str(bid_price)
             
             # With that data, create the notification...
-            notif_render = { 'AUCTION_PRICE' : enc_price,
+            notif_render = { 'AUCTION_PRICE' : bid_price,
                             'AUCTION_ID' : auction_id,
                             'AUCTION_IMP_ID' : spot_id }
             self.do_events(notif_render, bid_resp)
