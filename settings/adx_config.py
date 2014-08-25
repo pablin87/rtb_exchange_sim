@@ -27,7 +27,7 @@ conf = {
         # If set to true, instead of using the 'adserver_endpt_imp_tmpl' and 
         # 'adserver_endpt_click_tmpl', it will use the following heh templates
         # in order to hit heh instead of the ad server connector directly.
-        'use_heh_endpoint' : False, 
+        'use_heh_endpoint' : True, 
         'heh_endpt_imp_tmpl' : "http://localhost:8080/impression/adx/${AUCTION_ID}/${AUCTION_PRICE}?impid=${AUCTION_IMP_ID}",
         'heh_endpt_click_tmpl' : "http://localhost:8080/click/adx/${AUCTION_ID}?impid=${AUCTION_IMP_ID}"
         
