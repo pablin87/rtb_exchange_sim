@@ -1,4 +1,5 @@
 import re
+from BeautifulSoup import BeautifulSoup
 
 CLICK_REGEX = re.compile('(.*[\'\"])(?P<http>http://).*(?P<url>/click/.*\?.*)([\'\"].*)')
 IMP_REGEX = re.compile('(.*[\'\"])(?P<http>http://).*(?P<url>/impression/.*\?.*)([\'\"].*)')
@@ -35,3 +36,17 @@ def get_impression_url_source(adm):
     links_list = adm.split('<')
     imp_link_line = [ line for line in links_list if 'impression' in line][0]
     return IMP_REGEX.sub('\g<url>', imp_link_line)
+
+def extract_imp_beacons_from_adm(adm):
+    '''
+    Try to get the impression and click beacon from a adm openRTB field.
+    The click beacon is extracted from an anchor (<a>) tag from the 
+    '''
+    b = BeautifulSoup(adm)
+    imgtags = [ i for i in b if i.name == 'img']
+    return imgtags[0]['src']
+
+def extract_click_beacons_from_adm(adm):
+    b = BeautifulSoup(adm)
+    atag = b.find('a', attrs={'href':True})
+    return atag['href']
