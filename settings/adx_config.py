@@ -6,8 +6,8 @@ conf = {
         'http_resource' : 'adx',
 
         # Keys for price encryption in string hex
-        'encryption_key' : "b08c70cfbcb0eb6cab7e82c6b75da52072ae62b2bf4b990bb80a48d8141eec07",
-        'integrity_key' : "bf77ec55c30130c1d8cd1862ed2a4cd2c76ac33bc0c4ce8a3d3bbd3ad5687792",
+        'encryption_key' : "02EEa83c6c1211e10b9f88966ceec34908eb946f7ed6e441af42b3c0f3218140",
+        'integrity_key' : "bfFFec55c30130c1d8cd1862ed2a4cd2c76ac33bc0c4ce8a3d3bbd3ad5687792",
         'initialization_vector' : "4a3a6f470001e2407b8c4a605b9200f2",
 
         # BE CAREFUL when using this parameter set to true. When it is set to

@@ -7,12 +7,28 @@ import random
 import time
 
 import realtime_bidding_pb2
+import plugin.adx.encryption.adx_encryption_utils as adx_enc
 
 PROTOCOL_VERSION = 1
 
 BID_REQUEST_ID_LENGTH = 16  # In bytes.
 COOKIE_LENGTH = 20  # In bytes.
 COOKIE_VERSION = 1
+
+#DEFAULT if not given by configuration
+HEX_ENC_KEY = "02EEa83c6c1211e10b9f88966ceec34908eb946f7ed6e441af42b3c0f3218140"
+HEX_INT_KEY = "bfFFec55c30130c1d8cd1862ed2a4cd2c76ac33bc0c4ce8a3d3bbd3ad5687792"
+HEX_IV = "4a3a6f470001e2407b8c4a605b9200f2"
+
+HYPERLOCALSETS = [ { 'corners': [(20.0, -30.0), (40.0,10.0)], 
+                     'center_point': (50.0, 50.0)},
+                  { 'corners': [(10.0, -10.0)], 
+                    'center_point': (20.0, 30.0)},
+                  ]
+
+IDFAS = [ '11111111111111111111111111111111', 
+          '22222222222222222222222222222222',
+          '44444444444444444444444444444444']
 
 # Placement.
 CHANNELS = ['12345']
@@ -221,399 +237,438 @@ INSTREAM_VIDEO_TYPES = [
 
 random.seed(time.time())
 
-def create_mobile_generator():
-    return MobileBidGenerator(None, None)
+def create_mobile_generator(enc_key, int_key, iv):
+    return MobileBidGenerator(None, None,encryption_key=enc_key,
+                              integrity_key=int_key, initialization_vector=iv)
 
 class RandomBidGeneratorWrapper(object):
-  """Generates random BidRequests."""
+    """Generates random BidRequests."""
 
-  def __init__(self, google_id_list=None,
-               instream_video_proportion=DEFAULT_INSTREAM_VIDEO_PROPORTION,
-               mobile_proportion=DEFAULT_MOBILE_PROPORTION,
-               adgroup_ids_list=None):
-    """Constructs a new RandomBidGenerator.
+    def __init__(self, google_id_list=None,
+                 instream_video_proportion=DEFAULT_INSTREAM_VIDEO_PROPORTION,
+                 mobile_proportion=DEFAULT_MOBILE_PROPORTION,
+                 adgroup_ids_list=None):
+        """Constructs a new RandomBidGenerator.
 
-    Args:
-      google_id_list: A list of Google IDs (as strings), or None to randomly
-          generate IDs.
-      instream_video_proportion: The proportion of requests which are for
-          instream video ads [0.0, 1.0].
-      mobile_proportion: Fraction of requests that are from a mobile device.
-      adgroup_ids_list: A list of AdGroup IDs (as ints), or None to randomly
-          generate IDs.
-    """
-    self._instream_video_proportion = instream_video_proportion
-    self._mobile_proportion = mobile_proportion
-    self._default_bid_generator = DefaultBidGenerator(google_id_list,
+        Args:
+          google_id_list: A list of Google IDs (as strings), or None to randomly
+              generate IDs.
+          instream_video_proportion: The proportion of requests which are for
+              instream video ads [0.0, 1.0].
+          mobile_proportion: Fraction of requests that are from a mobile device.
+          adgroup_ids_list: A list of AdGroup IDs (as ints), or None to randomly
+              generate IDs.
+        """
+        self._instream_video_proportion = instream_video_proportion
+        self._mobile_proportion = mobile_proportion
+        self._default_bid_generator = DefaultBidGenerator(google_id_list,
+                                                          adgroup_ids_list)
+        self._mobile_bid_generator = MobileBidGenerator(google_id_list,
+                                                        adgroup_ids_list)
+        self._video_bid_generator = VideoBidGenerator(google_id_list,
                                                       adgroup_ids_list)
-    self._mobile_bid_generator = MobileBidGenerator(google_id_list,
-                                                    adgroup_ids_list)
-    self._video_bid_generator = VideoBidGenerator(google_id_list,
-                                                  adgroup_ids_list)
 
-  def GenerateBidRequest(self):
-    """Generates a random BidRequest.
+    def GenerateBidRequest(self):
+        """Generates a random BidRequest.
 
-    Returns:
-      An instance of realtime_bidding_pb2.BidRequest.
-    """
-    random_number = random.random()
-    if random_number < self._instream_video_proportion:
-      return self._video_bid_generator.GenerateBidRequest()
-    elif random_number < (self._instream_video_proportion
-                          + self._mobile_proportion):
-      return self._mobile_bid_generator.GenerateBidRequest()
-    # else
-    return self._default_bid_generator.GenerateBidRequest()
+        Returns:
+          An instance of realtime_bidding_pb2.BidRequest.
+        """
+        random_number = random.random()
+        if random_number < self._instream_video_proportion:
+            return self._video_bid_generator.GenerateBidRequest()
+        elif random_number < (self._instream_video_proportion
+                              + self._mobile_proportion):
+            return self._mobile_bid_generator.GenerateBidRequest()
+        # else
+        return self._default_bid_generator.GenerateBidRequest()
 
-  def GeneratePingRequest(self):
-    """Generates a special ping request.
+    def GeneratePingRequest(self):
+        """Generates a special ping request.
 
-    Returns:
-      A ping request with a generated id.
-    """
-    return self._default_bid_generator.GeneratePingRequest()
+        Returns:
+          A ping request with a generated id.
+        """
+        return self._default_bid_generator.GeneratePingRequest()
 
 
 class DefaultBidGenerator(object):
-  """Base bid request generator."""
+    """Base bid request generator."""
 
-  def __init__(self, google_id_list=None, adgroup_ids_list=None):
-    """Constructor for the base generator.
+    def __init__(self, google_id_list=None, adgroup_ids_list=None):
+        """Constructor for the base generator.
 
-    Args:
-      google_id_list: A list of Google IDs (as strings), or None to randomly
-          generate IDs.
-      adgroup_ids_list: A list of AdGroup IDs (as ints), or None to randomly
-          generate IDs.
-    """
-    self._google_id_list = google_id_list
-    if adgroup_ids_list is not None:
-      self._adgroup_ids = set(adgroup_ids_list)
-    else:
-      self._adgroup_ids = None
-    self._vendor_types = VENDOR_TYPES
-    self._slot_width, self._slot_height = random.choice(DIMENSIONS)
-    self._user_agent_list = USER_AGENTS
+        Args:
+          google_id_list: A list of Google IDs (as strings), or None to randomly
+              generate IDs.
+          adgroup_ids_list: A list of AdGroup IDs (as ints), or None to randomly
+              generate IDs.
+        """
+        self._google_id_list = google_id_list
+        if adgroup_ids_list is not None:
+            self._adgroup_ids = set(adgroup_ids_list)
+        else:
+            self._adgroup_ids = None
+        self._vendor_types = VENDOR_TYPES
+        self._slot_width, self._slot_height = random.choice(DIMENSIONS)
+        self._user_agent_list = USER_AGENTS
 
-  def GenerateBidRequest(self):
-    """Generates a random BidRequest.
+    def GenerateBidRequest(self):
+        """Generates a random BidRequest.
 
-    Returns:
-      An instance of realtime_bidding_pb2.BidRequest.
-    """
-    bid_request = realtime_bidding_pb2.BidRequest()
-    bid_request.is_test = True
-    bid_request.id = self._GenerateId(BID_REQUEST_ID_LENGTH)
-    bid_request.user_agent = random.choice(USER_AGENTS)
-    self._GeneratePageInfo(bid_request)
-    self._GenerateUserInfo(bid_request)
-    self._GenerateAdSlot(bid_request)
+        Returns:
+          An instance of realtime_bidding_pb2.BidRequest.
+        """
+        bid_request = realtime_bidding_pb2.BidRequest()
+        bid_request.is_test = True
+        bid_request.id = self._GenerateId(BID_REQUEST_ID_LENGTH)
+        bid_request.user_agent = random.choice(USER_AGENTS)
+        self._GeneratePageInfo(bid_request)
+        self._GenerateUserInfo(bid_request)
+        self._GenerateAdSlot(bid_request)
 
-    return bid_request
+        return bid_request
 
-  def GeneratePingRequest(self):
-    """Generates a special ping request.
+    def GeneratePingRequest(self):
+        """Generates a special ping request.
 
-    A ping request only has the id and is_ping fields set.
+        A ping request only has the id and is_ping fields set.
 
-    Returns:
-      An instance of realtime_bidding_pb2.BidRequest.
-    """
-    bid_request = realtime_bidding_pb2.BidRequest()
-    bid_request.id = self._GenerateId(BID_REQUEST_ID_LENGTH)
-    bid_request.is_ping = True
-    return bid_request
+        Returns:
+          An instance of realtime_bidding_pb2.BidRequest.
+        """
+        bid_request = realtime_bidding_pb2.BidRequest()
+        bid_request.id = self._GenerateId(BID_REQUEST_ID_LENGTH)
+        bid_request.is_ping = True
+        return bid_request
 
-  def _GenerateId(self, length):
-    """Generates a random ID.
+    def _GenerateId(self, length):
+        """Generates a random ID.
 
-    The generated ID is not guaranteed to be unique.
+        The generated ID is not guaranteed to be unique.
 
-    Args:
-      length: Length of generated ID in bytes.
-    Returns:
-      A random ID of the given length.
-    """
-    random_id = ''
-    for _ in range(length):
-      random_id += chr(random.randint(0, 255))
-    return random_id
+        Args:
+          length: Length of generated ID in bytes.
+        Returns:
+          A random ID of the given length.
+        """
+        random_id = ''
+        for _ in range(length):
+            random_id += chr(random.randint(0, 255))
+        return random_id
 
-  def _GeneratePublisherData(self, bid_request):
-    """Generates publisher fields.
+    def _GeneratePublisherData(self, bid_request):
+        """Generates publisher fields.
 
-    A random decision is made to choose between anonymous and branded data.
+        A random decision is made to choose between anonymous and branded data.
 
-    Args:
-      bid_request: a realtime_bidding_pb2.BidRequest instance
-    """
-    # 50% chance of anonymous ID/branded URL.
-    if random.choice([True, False]):
-      url, seller_id, pub_id, seller = random.choice(BRANDED_PUB_DATA)
-      bid_request.url = url
-      bid_request.seller_network_id = seller_id
-      bid_request.publisher_settings_list_id = pub_id
-      bid_request.DEPRECATED_seller_network = seller
-    else:
-      anonymous_id, pub_id = random.choice(ANONYMOUS_PUB_DATA)
-      bid_request.anonymous_id = anonymous_id
-      bid_request.publisher_settings_list_id = pub_id
+        Args:
+          bid_request: a realtime_bidding_pb2.BidRequest instance
+        """
+        # 50% chance of anonymous ID/branded URL.
+        if random.choice([True, False]):
+            url, seller_id, pub_id, seller = random.choice(BRANDED_PUB_DATA)
+            bid_request.url = url
+            bid_request.seller_network_id = seller_id
+            bid_request.publisher_settings_list_id = pub_id
+            bid_request.DEPRECATED_seller_network = seller
+        else:
+            anonymous_id, pub_id = random.choice(ANONYMOUS_PUB_DATA)
+            bid_request.anonymous_id = anonymous_id
+            bid_request.publisher_settings_list_id = pub_id
 
-  def _GeneratePageInfo(self, bid_request):
-    """Generates page information for the given bid_request.
+    def _GeneratePageInfo(self, bid_request):
+        """Generates page information for the given bid_request.
 
-    Args:
-      bid_request: a realtime_bidding_pb2.BidRequest instance
-    """
-    self._GeneratePublisherData(bid_request)
-    bid_request.detected_language.append(random.choice(LANGUAGE_CODES))
-    self._GenerateVerticals(bid_request)
+        Args:
+          bid_request: a realtime_bidding_pb2.BidRequest instance
+        """
+        self._GeneratePublisherData(bid_request)
+        bid_request.detected_language.append(random.choice(LANGUAGE_CODES))
+        self._GenerateVerticals(bid_request)
 
-  def _GenerateAdSlot(self, bid_request):
-    """Generates a single ad slot with random data.
+    def _GenerateAdSlot(self, bid_request):
+        """Generates a single ad slot with random data.
 
-    Args:
-      bid_request: a realtime_bidding_pb2.BidRequest instance
-    """
-    ad_slot = bid_request.adslot.add()
-    ad_slot.id = random.randint(1, MAX_SLOT_ID)
-    if self._slot_width is not None:
-      ad_slot.width.append(self._slot_width)
-    if self._slot_height is not None:
-      ad_slot.height.append(self._slot_height)
+        Args:
+          bid_request: a realtime_bidding_pb2.BidRequest instance
+        """
+        ad_slot = bid_request.adslot.add()
+        ad_slot.id = random.randint(1, MAX_SLOT_ID)
+        if self._slot_width is not None:
+            ad_slot.width.append(self._slot_width)
+        if self._slot_height is not None:
+            ad_slot.height.append(self._slot_height)
 
-    num_included_vendor_types = random.randint(1, MAX_INCLUDED_VENDOR_TYPES)
-    for allowed_vendor in self._GenerateSet(self._vendor_types,
-                                            num_included_vendor_types):
-      ad_slot.allowed_vendor_type.append(allowed_vendor)
+        num_included_vendor_types = random.randint(1, MAX_INCLUDED_VENDOR_TYPES)
+        for allowed_vendor in self._GenerateSet(self._vendor_types,
+                                                num_included_vendor_types):
+            ad_slot.allowed_vendor_type.append(allowed_vendor)
 
-    # Generate random excluded creative attributes.
-    num_excluded_creative_attributes = random.randint(1,
-                                                      MAX_EXCLUDED_ATTRIBUTES)
-    for creative_attribute in self._GenerateSet(
-        CREATIVE_ATTRIBUTES, num_excluded_creative_attributes):
-      ad_slot.excluded_attribute.append(creative_attribute)
+        # Generate random excluded creative attributes.
+        num_excluded_creative_attributes = random.randint(1,
+                                                          MAX_EXCLUDED_ATTRIBUTES)
+        for creative_attribute in self._GenerateSet(
+            CREATIVE_ATTRIBUTES, num_excluded_creative_attributes):
+            ad_slot.excluded_attribute.append(creative_attribute)
 
-    # Generate excluded categories for 20% of requests.
-    if random.random() < 0.2:
-      num_excluded_categories = random.randint(1, MAX_EXCLUDED_CATEGORIES)
-      for excluded_category in self._GenerateSet(AD_CATEGORIES,
-                                                 num_excluded_categories):
-        ad_slot.excluded_sensitive_category.append(excluded_category)
+        # Generate excluded categories for 20% of requests.
+        if random.random() < 0.2:
+            num_excluded_categories = random.randint(1, MAX_EXCLUDED_CATEGORIES)
+            for excluded_category in self._GenerateSet(AD_CATEGORIES,
+                                                       num_excluded_categories):
+                ad_slot.excluded_sensitive_category.append(excluded_category)
 
-    # Generate ad slot publisher settings list id by combining bid request
-    # pub settings id and slot id.
-    ad_slot.publisher_settings_list_id = (bid_request.publisher_settings_list_id
-                                          + ad_slot.id)
+        # Generate ad slot publisher settings list id by combining bid request
+        # pub settings id and slot id.
+        ad_slot.publisher_settings_list_id = (bid_request.publisher_settings_list_id
+                                              + ad_slot.id)
 
-    # We generate channels only for branded sites, simplifying by using the
-    # same list of channels for all publishers.
-    if bid_request.HasField('seller_network_id'):
-      # Send only for 10% of bid requests, to simulate that few bid requests
-      # have targetable channels in reality.
-      send_channels = random.random < 0.1
-      if send_channels:
-        num_targetable_channels = random.randint(1, MAX_TARGETABLE_CHANNELS)
-        for channel in self._GenerateSet(TARGETABLE_CHANNELS,
-                                         num_targetable_channels):
-          ad_slot.targetable_channel.append(channel)
+        # We generate channels only for branded sites, simplifying by using the
+        # same list of channels for all publishers.
+        if bid_request.HasField('seller_network_id'):
+            # Send only for 10% of bid requests, to simulate that few bid requests
+            # have targetable channels in reality.
+            send_channels = random.random < 0.1
+            if send_channels:
+                num_targetable_channels = random.randint(1, MAX_TARGETABLE_CHANNELS)
+                for channel in self._GenerateSet(TARGETABLE_CHANNELS,
+                                                 num_targetable_channels):
+                    ad_slot.targetable_channel.append(channel)
 
-    # Generate adgroup IDs, either randomly or from the ID list parameter
-    if self._adgroup_ids:
-      num_matching_adgroups = random.randint(1, len(self._adgroup_ids))
-      generated_ids = random.sample(self._adgroup_ids, num_matching_adgroups)
-    else:
-      num_matching_adgroups = random.randint(1, MAX_MATCHING_ADGROUPS)
-      generated_ids = [random.randint(1, MAX_ADGROUP_ID)
-                       for _ in xrange(num_matching_adgroups)]
+        # Generate adgroup IDs, either randomly or from the ID list parameter
+        if self._adgroup_ids:
+            num_matching_adgroups = random.randint(1, len(self._adgroup_ids))
+            generated_ids = random.sample(self._adgroup_ids, num_matching_adgroups)
+        else:
+            num_matching_adgroups = random.randint(1, MAX_MATCHING_ADGROUPS)
+            generated_ids = [random.randint(1, MAX_ADGROUP_ID)
+                             for _ in xrange(num_matching_adgroups)]
 
-    for generated_id in generated_ids:
-      ad_data = ad_slot.matching_ad_data.add()
-      ad_data.adgroup_id = generated_id
+        for generated_id in generated_ids:
+            ad_data = ad_slot.matching_ad_data.add()
+            ad_data.adgroup_id = generated_id
 
-      # 10% of adgroup requests will have a direct deal enabled
-      if random.random() < 0.10:
-        direct_deal = ad_data.direct_deal.add()
-        direct_deal.direct_deal_id = random.randint(1, MAX_DIRECT_DEAL_ID)
-        direct_deal.fixed_cpm_micros = random.randint(1, 99) * 10000
-        ad_data.minimum_cpm_micros = direct_deal.fixed_cpm_micros
+            # 10% of adgroup requests will have a direct deal enabled
+            if random.random() < 0.10:
+                direct_deal = ad_data.direct_deal.add()
+                direct_deal.direct_deal_id = random.randint(1, MAX_DIRECT_DEAL_ID)
+                direct_deal.fixed_cpm_micros = random.randint(1, 99) * 10000
+                ad_data.minimum_cpm_micros = direct_deal.fixed_cpm_micros
 
-  def _GenerateVerticals(self, bid_request):
-    """Populates bid_request with random verticals.
+    def _GenerateVerticals(self, bid_request):
+        """Populates bid_request with random verticals.
 
-    Args:
-      bid_request: a realtime_bidding_pb2.BidRequest instance.
-    """
-    verticals = self._GenerateSet(VERTICALS, MAX_NUM_VERTICALS)
-    for vertical in verticals:
-      vertical_pb = bid_request.detected_vertical.add()
-      vertical_pb.id = vertical
-      vertical_pb.weight = random.random()
+        Args:
+          bid_request: a realtime_bidding_pb2.BidRequest instance.
+        """
+        verticals = self._GenerateSet(VERTICALS, MAX_NUM_VERTICALS)
+        for vertical in verticals:
+            vertical_pb = bid_request.detected_vertical.add()
+            vertical_pb.id = vertical
+            vertical_pb.weight = random.random()
 
-  def _GenerateGoogleID(self, bid_request):
-    """Generates the google id field.
+    def _GenerateGoogleID(self, bid_request):
+        """Generates the google id field.
 
-    If the RandomBidGenerator was initated with a list of Google IDs, one of
-    these is picked at random, otherwise a random ID is generated.
+        If the RandomBidGenerator was initated with a list of Google IDs, one of
+        these is picked at random, otherwise a random ID is generated.
 
-    Args:
-      bid_request: A realtime_bidding_pb2.BidRequest instance.
-    """
-    if self._google_id_list:
-      bid_request.google_user_id = random.choice(self._google_id_list)
-    else:
-      hashed_cookie = self._GenerateId(COOKIE_LENGTH)
-      google_user_id = base64.urlsafe_b64encode(hashed_cookie)
-      # Remove padding, i.e. remove '='s off the end.
-      bid_request.google_user_id = google_user_id[:google_user_id.find('=')]
-    # Cookie age of [1 second, 30 days).
-    bid_request.cookie_age_seconds = random.randint(1, 60*60*24*30)
+        Args:
+          bid_request: A realtime_bidding_pb2.BidRequest instance.
+        """
+        if self._google_id_list:
+            bid_request.google_user_id = random.choice(self._google_id_list)
+        else:
+            hashed_cookie = self._GenerateId(COOKIE_LENGTH)
+            google_user_id = base64.urlsafe_b64encode(hashed_cookie)
+            # Remove padding, i.e. remove '='s off the end.
+            bid_request.google_user_id = google_user_id[:google_user_id.find('=')]
+        # Cookie age of [1 second, 30 days).
+        bid_request.cookie_age_seconds = random.randint(1, 60*60*24*30)
 
-  def _GenerateUserInfo(self, bid_request):
-    """Generates random user information.
+    def _GenerateUserInfo(self, bid_request):
+        """Generates random user information.
 
-    Args:
-      bid_request: a realtime_bidding_pb2.BidRequest instance
-    """
-    geo_id, postal, postal_prefix = random.choice(GEO_CRITERIA)
-    bid_request.geo_criteria_id = geo_id
-    if postal:
-      bid_request.postal_code = postal
-    elif postal_prefix:
-      bid_request.postal_code_prefix = postal_prefix
-    self._GenerateGoogleID(bid_request)
-    bid_request.cookie_version = COOKIE_VERSION
-    # 4 bytes in IPv4, but last byte is truncated giving an overall length of 3
-    # bytes.
-    ip = self._GenerateId(3)
-    bid_request.ip = ip
+        Args:
+          bid_request: a realtime_bidding_pb2.BidRequest instance
+        """
+        geo_id, postal, postal_prefix = random.choice(GEO_CRITERIA)
+        bid_request.geo_criteria_id = geo_id
+        if postal:
+            bid_request.postal_code = postal
+        elif postal_prefix:
+            bid_request.postal_code_prefix = postal_prefix
+        self._GenerateGoogleID(bid_request)
+        bid_request.cookie_version = COOKIE_VERSION
+        # 4 bytes in IPv4, but last byte is truncated giving an overall length of 3
+        # bytes.
+        ip = self._GenerateId(3)
+        bid_request.ip = ip
 
-  def _GenerateSet(self, collection, set_size):
-    """Generates a set of randomly chosen elements from the given collection.
+    def _GenerateSet(self, collection, set_size):
+        """Generates a set of randomly chosen elements from the given collection.
 
-    Args:
-      collection: a list-like collection of elements
-      set_size: the size of set to generate
+        Args:
+          collection: a list-like collection of elements
+          set_size: the size of set to generate
 
-    Returns:
-      A set of randomly chosen elements from the given collection.
-    """
-    unique_collection = set(collection)
-    if len(unique_collection) < set_size:
-      return unique_collection
+        Returns:
+          A set of randomly chosen elements from the given collection.
+        """
+        unique_collection = set(collection)
+        if len(unique_collection) < set_size:
+            return unique_collection
 
-    s = set()
-    while len(s) < set_size:
-      s.add(random.choice(collection))
+        s = set()
+        while len(s) < set_size:
+            s.add(random.choice(collection))
 
-    return s
+        return s
 
 
 class VideoBidGenerator(DefaultBidGenerator):
-  """Video bid request generator."""
+    """Video bid request generator."""
 
-  def __init__(self, google_id_list=None, adgroup_ids_list=None):
-    """Constructor for the video request generator.
+    def __init__(self, google_id_list=None, adgroup_ids_list=None):
+        """Constructor for the video request generator.
 
-    Args:
-      google_id_list: A list of Google IDs (as strings), or None to randomly
-          generate IDs.
-      adgroup_ids_list: A list of AdGroup IDs (as ints), or None to randomly
-          generate IDs.
-    """
-    DefaultBidGenerator.__init__(self, google_id_list, adgroup_ids_list)
-    self._slot_width = None
-    self._slot_height = None
-    self._vendor_types = INSTREAM_VIDEO_VENDOR_TYPES
+        Args:
+          google_id_list: A list of Google IDs (as strings), or None to randomly
+              generate IDs.
+          adgroup_ids_list: A list of AdGroup IDs (as ints), or None to randomly
+              generate IDs.
+        """
+        DefaultBidGenerator.__init__(self, google_id_list, adgroup_ids_list)
+        self._slot_width = None
+        self._slot_height = None
+        self._vendor_types = INSTREAM_VIDEO_VENDOR_TYPES
 
-  def _GeneratePageInfo(self, bid_request):
-    """Generates page information for the given video bid request.
+    def _GeneratePageInfo(self, bid_request):
+        """Generates page information for the given video bid request.
 
-    Args:
-      bid_request: a realtime_bidding_pb2.BidRequest instance
-    """
-    # Call the base class page info generate method.
-    super(VideoBidGenerator, self)._GeneratePageInfo(bid_request)
-    # Add video specific fields.
-    video = bid_request.video
-    request_type = random.choice(INSTREAM_VIDEO_TYPES)
+        Args:
+          bid_request: a realtime_bidding_pb2.BidRequest instance
+        """
+        # Call the base class page info generate method.
+        super(VideoBidGenerator, self)._GeneratePageInfo(bid_request)
+        # Add video specific fields.
+        video = bid_request.video
+        request_type = random.choice(INSTREAM_VIDEO_TYPES)
 
-    if request_type == INSTREAM_VIDEO_MIDROLL:
-      delay_seconds = random.randint(1,
-                                     INSTREAM_VIDEO_START_DELAY_MAX_SECONDS)
-      video.videoad_start_delay = delay_seconds * 1000  # In milliseconds.
-    else:
-      video.videoad_start_delay = request_type
+        if request_type == INSTREAM_VIDEO_MIDROLL:
+            delay_seconds = random.randint(1,
+                                           INSTREAM_VIDEO_START_DELAY_MAX_SECONDS)
+            video.videoad_start_delay = delay_seconds * 1000  # In milliseconds.
+        else:
+            video.videoad_start_delay = request_type
 
-    # 50% chance of setting max_ad_duration.
-    if random.choice([True, False]):
-      max_ad_duration_seconds = random.randint(
-          1, INSTREAM_VIDEO_DURATION_MAX_SECONDS)
-      # In milliseconds.
-      video.max_ad_duration = max_ad_duration_seconds * 1000
+        # 50% chance of setting max_ad_duration.
+        if random.choice([True, False]):
+            max_ad_duration_seconds = random.randint(
+                1, INSTREAM_VIDEO_DURATION_MAX_SECONDS)
+            # In milliseconds.
+            video.max_ad_duration = max_ad_duration_seconds * 1000
 
 
 class MobileBidGenerator(DefaultBidGenerator):
-  """Mobile bid request generator."""
+    """Mobile bid request generator."""
 
-  def __init__(self, google_id_list=None, adgroup_ids_list=None):
-    """Constructor for the mobile request generator.
+    def __init__(self, google_id_list=None, adgroup_ids_list=None,
+                 encryption_key=HEX_ENC_KEY, integrity_key=HEX_INT_KEY,
+                 initialization_vector= HEX_IV):
+        """Constructor for the mobile request generator.
 
-    Args:
-      google_id_list: A list of Google IDs (as strings), or None to randomly
-          generate IDs.
-      adgroup_ids_list: A list of AdGroup IDs (as ints), or None to randomly
-          generate IDs.
-    """
-    DefaultBidGenerator.__init__(self, google_id_list, adgroup_ids_list)
-    self._slot_width = None
-    self._slot_height = None
-    self._vendor_types = MOBILE_VENDOR_TYPES
+        Args:
+          google_id_list: A list of Google IDs (as strings), or None to randomly
+              generate IDs.
+          adgroup_ids_list: A list of AdGroup IDs (as ints), or None to randomly
+              generate IDs.
+        """
+        DefaultBidGenerator.__init__(self, google_id_list, adgroup_ids_list)
+        self._slot_width = None
+        self._slot_height = None
+        self._vendor_types = MOBILE_VENDOR_TYPES
+        self.enc_key = adx_enc.hex2bytes(encryption_key)
+        self.int_key = adx_enc.hex2bytes(integrity_key)
+        self.iv = adx_enc.hex2bytes(initialization_vector)
 
-  def GenerateBidRequest(self):
-    """Generates a random BidRequest.
+    def GenerateBidRequest(self):
+        """Generates a random BidRequest.
 
-    Randomly picks device info from available set, sets user agent and screen
-    sizes before calling parent generate bid request.
-    Returns:
-      An instance of realtime_bidding_pb2.BidRequest.
-    """
-    bid_request = realtime_bidding_pb2.BidRequest()
-    bid_request.is_test = True
-    bid_request.id = self._GenerateId(BID_REQUEST_ID_LENGTH)
-    self._GeneratePageInfo(bid_request)
-    # Pick a mobile device at random.
-    (platform, os_major_version, os_minor_version, os_micro_version,
-     device_type, is_app_request, is_interstitial, orientation,
-     self._slot_width, self._slot_height,
-     bid_request.user_agent) = random.choice(MOBILE_DEVICE_INFO)
+        Randomly picks device info from available set, sets user agent and screen
+        sizes before calling parent generate bid request.
+        Returns:
+          An instance of realtime_bidding_pb2.BidRequest.
+        """
+        bid_request = realtime_bidding_pb2.BidRequest()
+        bid_request.is_test = True
+        bid_request.id = self._GenerateId(BID_REQUEST_ID_LENGTH)
+        self._GeneratePageInfo(bid_request)
+        # Pick a mobile device at random.
+        (platform, os_major_version, os_minor_version, os_micro_version,
+         device_type, is_app_request, is_interstitial, orientation,
+         self._slot_width, self._slot_height,
+         bid_request.user_agent) = random.choice(MOBILE_DEVICE_INFO)
 
-    # Add mobile fields
-    mobile = bid_request.mobile
-    mobile.carrier_id = random.choice(MOBILE_CARRIERS)
-    mobile.platform = platform
-    mobile.os_version.os_version_major = os_major_version
-    mobile.os_version.os_version_minor = os_minor_version
-    mobile.os_version.os_version_micro = os_micro_version
-    mobile.mobile_device_type = device_type
-    mobile.is_app = is_app_request
-    mobile.is_interstitial_request = is_interstitial
-    mobile.screen_orientation = orientation
-    if is_app_request:
-      category_ids = None
-      if platform == 'android':
-        category_ids = self._GenerateSet(MOBILE_ANDROID_CATEGORY_IDS,
-                                         random.randint(1, NUM_CATEGORIES))
-        mobile.app_id = random.choice(ANDROID_APP_IDS)
-      else:
-        category_ids = self._GenerateSet(MOBILE_IOS_CATEGORY_IDS,
-                                         random.randint(1, NUM_CATEGORIES))
-        mobile.app_id = random.choice(IOS_APP_IDS)
-      for category_id in category_ids:
-        mobile.app_category_ids.append(category_id)
+        # Add mobile fields
+        mobile = bid_request.mobile
+        mobile.carrier_id = random.choice(MOBILE_CARRIERS)
+        mobile.platform = platform
+        mobile.os_version.os_version_major = os_major_version
+        mobile.os_version.os_version_minor = os_minor_version
+        mobile.os_version.os_version_micro = os_micro_version
+        mobile.mobile_device_type = device_type
+        mobile.is_app = is_app_request
+        mobile.is_interstitial_request = is_interstitial
+        mobile.screen_orientation = orientation
+        if is_app_request:
+            category_ids = None
+            if platform == 'android':
+                category_ids = self._GenerateSet(MOBILE_ANDROID_CATEGORY_IDS,
+                                                 random.randint(1, NUM_CATEGORIES))
+                mobile.app_id = random.choice(ANDROID_APP_IDS)
+            else:
+                category_ids = self._GenerateSet(MOBILE_IOS_CATEGORY_IDS,
+                                                 random.randint(1, NUM_CATEGORIES))
+                mobile.app_id = random.choice(IOS_APP_IDS)
+            for category_id in category_ids:
+                mobile.app_category_ids.append(category_id)
 
-    self._GenerateUserInfo(bid_request)
-    self._GenerateAdSlot(bid_request)
+        self._GenerateUserInfo(bid_request)
+        self._GenerateAdSlot(bid_request)
 
-    return bid_request
+        self.add_HyperlocalSet(bid_request)
+        self.add_idfa(bid_request)
+
+        return bid_request
+
+    def add_HyperlocalSet(self, br):
+        if len(HYPERLOCALSETS) == 0:
+            return
+        
+        hpls = realtime_bidding_pb2.BidRequest.HyperlocalSet()
+        
+        # Add hyperlocal with some points
+        hpl = hpls.hyperlocal.add()
+        d = random.choice(HYPERLOCALSETS)
+        for lat, lon in d['corners']:
+            point = hpl.corners.add()
+            point.longitude = lon
+            point.latitude = lat
+        
+        # Add center point if any
+        if 'center_point' in d:
+            hpls.center_point.latitude = d['center_point'][0]
+            hpls.center_point.longitude = d['center_point'][1]
+        
+        # Encrypt and add the hyperlocalset to the br
+        enc_hpls = adx_enc.encrypt_hyperlocalset(hpls, self.enc_key, 
+                                                 self.int_key, self.iv) 
+        br.encrypted_hyperlocal_set = enc_hpls
+    
+    def add_idfa(self, br):
+        idfa = random.choice(IDFAS)
+        enc_idfa = adx_enc.adx_encrypt(idfa, self.enc_key, self.int_key, 
+                                       self.iv)
+        br.encrypted_advertising_id =  enc_idfa

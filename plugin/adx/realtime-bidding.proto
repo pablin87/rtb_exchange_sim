@@ -83,7 +83,7 @@ message BidRequest {
   optional string user_agent = 6;
 
   // Geo information.  These use a subset of the codes used in the AdWords API.
-  // See the geo-tables.csv table in the technical documentation for a list of
+  // See the geo-table.csv table in the technical documentation for a list of
   // ids.  The geo_criteria_id field replaces the deprecated country, region,
   // city, and metro fields.
   optional int32 geo_criteria_id = 39;
@@ -131,7 +131,29 @@ message BidRequest {
   optional int32 timezone_offset = 25;
 
   // List of detected user verticals.  Currently unused.
-  repeated int32 user_vertical = 30 [packed=true];
+  repeated int32 user_vertical = 30 [
+      packed=true
+  ];
+
+  // Demographic data provided by the publisher.
+  message UserDemographic {
+    enum Gender {
+      UNKNOWN = 0;
+      MALE = 1;
+      FEMALE = 2;
+    }
+    // Gender
+    optional Gender gender = 1 [
+        default = UNKNOWN
+    ];
+
+    // Age interval
+    optional int32 age_low = 2 [
+        default = 0];
+    optional int32 age_high = 3 [
+        default = 999];
+  }
+  optional UserDemographic user_demographic = 50;
 
   // Audience-targeting list to which the user has been added. See the Buyer UI
   // Help topics on remarketing, where it is called a remarketing list.
@@ -166,8 +188,9 @@ message BidRequest {
   // request.
   optional string anonymous_id = 19;
 
-  // The two or 5 letter code for the languages of the page or the user.  The
-  // documentation for the codes is at
+  // Detected user languages, based on the language of the web page, the browser
+  // settings, and other signals. The order is arbitrary.  The codes are 2 or 5
+  // letters and are documented at
   // https://developers.google.com/adwords/api/docs/appendix/languagecodes
   repeated string detected_language = 12;
 
@@ -319,6 +342,13 @@ message BidRequest {
     optional bytes constrained_usage_encrypted_advertising_id = 22;
     optional bytes constrained_usage_encrypted_hashed_idfa = 23;
 
+    // App name for Android apps in Google Play store.
+    optional string app_name = 24;
+
+    // Average user rating for the app.  The range of user rating is between 1.0
+    // and 5.0.  Currently only available for apps in Google Play store.
+    optional float app_rating = 25;
+
     // These are deprecated.  Please ignore.
     optional string DEPRECATED_app_name = 1;
     optional string DEPRECATED_company_name = 2;
@@ -460,7 +490,7 @@ message BidRequest {
     repeated int32 height = 3;
 
     // The disallowed attribute ids for the ads that can show in this slot.  See
-    // the publisher-excluded-creative-attributes.txt file in the technical
+    // the publisher-excludable-creative-attributes.txt file in the technical
     // documentation for a list of ids.
     repeated int32 excluded_attribute = 4 [packed=true];
 
@@ -498,6 +528,34 @@ message BidRequest {
       // auction.  This may be a global minimum, or it may be a minimum set by
       // the publisher.  The value is in micros of your account currency.
       optional int64 minimum_cpm_micros = 5;
+
+      // Publisher open auction pricing rules applicable to a particular buyer.
+      message BuyerPricingRule {
+        // Only one of the included_advertisers and excluded_advertisers fields
+        // can be set in a rule.  See advertisers.txt file in the technical
+        // documentation for a list of ids.
+        repeated int64 included_advertisers = 1;
+        repeated int64 excluded_advertisers = 2;
+
+        // Only one of the included_agencies and excluded_agencies fields
+        // can be set in a rule.  See agencies.txt file in the technical
+        // documentation for a list of ids.
+        repeated int64 included_agencies = 3;
+        repeated int64 excluded_agencies = 4;
+
+        // Only one of the blocked and minimum_cpm_micros can be set in a rule.
+        // If set to true, indicates that the specified advertisers/agencies are
+        // blocked from bidding.
+        optional bool blocked = 5;
+
+        // Minimum CPM value that you can bid to not be filtered before the
+        // auction.  The value is in micros of the bidder account currency.
+        optional int64 minimum_cpm_micros = 6;
+      }
+
+      // Publisher open auction pricing rules in priority order, from highest to
+      // lowest.
+      repeated BuyerPricingRule pricing_rule = 7;
 
       // Information about any direct deals that matched for this inventory.
       //

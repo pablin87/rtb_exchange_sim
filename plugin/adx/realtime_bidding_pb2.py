@@ -11,9 +11,34 @@ from google.protobuf import descriptor_pb2
 DESCRIPTOR = descriptor.FileDescriptor(
   name='realtime-bidding.proto',
   package='',
-  serialized_pb='\n\x16realtime-bidding.proto\"\x88)\n\nBidRequest\x12\n\n\x02id\x18\x02 \x02(\x0c\x12\n\n\x02ip\x18\x04 \x01(\x0c\x12:\n\x13user_data_treatment\x18\x31 \x03(\x0e\x32\x1d.BidRequest.UserDataTreatment\x12\x16\n\x0egoogle_user_id\x18\x15 \x01(\t\x12(\n constrained_usage_google_user_id\x18/ \x01(\t\x12\x16\n\x0e\x63ookie_version\x18\x14 \x01(\r\x12\x1a\n\x12\x63ookie_age_seconds\x18\x1f \x01(\x05\x12\x19\n\x11hosted_match_data\x18% \x01(\x0c\x12+\n#constrained_usage_hosted_match_data\x18\x30 \x01(\x0c\x12\x12\n\nuser_agent\x18\x06 \x01(\t\x12\x17\n\x0fgeo_criteria_id\x18\' \x01(\x05\x12\x13\n\x0bpostal_code\x18! \x01(\t\x12\x1a\n\x12postal_code_prefix\x18\" \x01(\t\x12 \n\x18\x65ncrypted_hyperlocal_set\x18( \x01(\x0c\x12\x17\n\x0ftimezone_offset\x18\x19 \x01(\x05\x12\x19\n\ruser_vertical\x18\x1e \x03(\x05\x42\x02\x10\x01\x12\'\n\tuser_list\x18  \x03(\x0b\x32\x14.BidRequest.UserList\x12\x19\n\x11seller_network_id\x18) \x01(\x05\x12\x0b\n\x03url\x18\x0b \x01(\t\x12\x14\n\x0c\x61nonymous_id\x18\x13 \x01(\t\x12\x19\n\x11\x64\x65tected_language\x18\x0c \x03(\t\x12/\n\x11\x64\x65tected_vertical\x18\r \x03(\x0b\x32\x14.BidRequest.Vertical\x12#\n\x1bvertical_dictionary_version\x18\x18 \x01(\x05\x12\"\n\x16\x64\x65tected_content_label\x18\x1a \x03(\x05\x42\x02\x10\x01\x12\x14\n\x0csite_list_id\x18$ \x03(\x05\x12\'\n\tkey_value\x18& \x03(\x0b\x32\x14.BidRequest.KeyValue\x12\"\n\x06mobile\x18\x1c \x01(\x0b\x32\x12.BidRequest.Mobile\x12 \n\x05video\x18\x1d \x01(\x0b\x32\x11.BidRequest.Video\x12\"\n\x1apublisher_settings_list_id\x18* \x01(\x06\x12\"\n\x06\x61\x64slot\x18\x0e \x03(\x0b\x32\x12.BidRequest.AdSlot\x12>\n\x15\x62id_response_feedback\x18, \x03(\x0b\x32\x1f.BidRequest.BidResponseFeedback\x12\x16\n\x07is_test\x18\x0f \x01(\x08:\x05\x66\x61lse\x12\x16\n\x07is_ping\x18\x11 \x01(\x08:\x05\x66\x61lse\x12)\n\x1ais_predicted_to_be_ignored\x18- \x01(\x08:\x05\x66\x61lse\x12#\n\x1b\x44\x45PRECATED_protocol_version\x18\x01 \x01(\x05\x12%\n\x1d\x44\x45PRECATED_click_tracking_url\x18\x03 \x01(\t\x12\x19\n\x11\x44\x45PRECATED_cookie\x18\x05 \x01(\x04\x12\x1a\n\x12\x44\x45PRECATED_country\x18\x07 \x01(\t\x12\x19\n\x11\x44\x45PRECATED_region\x18\x08 \x01(\t\x12\x17\n\x0f\x44\x45PRECATED_city\x18\t \x01(\t\x12\x18\n\x10\x44\x45PRECATED_metro\x18\n \x01(\x05\x12 \n\x18\x44\x45PRECATED_hashed_cookie\x18\x10 \x01(\x0c\x12-\n%DEPRECATED_excluded_click_through_url\x18\x12 \x03(\t\x12!\n\x19\x44\x45PRECATED_seller_network\x18\x16 \x01(\t\x12-\n%DEPRECATED_publisher_settings_list_id\x18\x17 \x01(\x0c\x12@\n\x1b\x44\x45PRECATED_matching_network\x18\x1b \x03(\x0b\x32\x1b.BidRequest.MatchingNetwork\x12/\n DEPRECATED_experimental_deadline\x18# \x01(\x08:\x05\x66\x61lse\x1ai\n\nHyperlocal\x12-\n\x07\x63orners\x18\x01 \x03(\x0b\x32\x1c.BidRequest.Hyperlocal.Point\x1a,\n\x05Point\x12\x10\n\x08latitude\x18\x01 \x01(\x02\x12\x11\n\tlongitude\x18\x02 \x01(\x02\x1ao\n\rHyperlocalSet\x12*\n\nhyperlocal\x18\x01 \x03(\x0b\x32\x16.BidRequest.Hyperlocal\x12\x32\n\x0c\x63\x65nter_point\x18\x02 \x01(\x0b\x32\x1c.BidRequest.Hyperlocal.Point\x1a+\n\x08UserList\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x13\n\x0b\x61ge_seconds\x18\x02 \x01(\x05\x1a&\n\x08Vertical\x12\n\n\x02id\x18\x01 \x02(\x05\x12\x0e\n\x06weight\x18\x02 \x02(\x02\x1a&\n\x08KeyValue\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\x1a\x96\x08\n\x06Mobile\x12\x10\n\x08platform\x18\x03 \x01(\t\x12\r\n\x05\x62rand\x18\x0c \x01(\t\x12\r\n\x05model\x18\r \x01(\t\x12\x36\n\nos_version\x18\x0e \x01(\x0b\x32\".BidRequest.Mobile.DeviceOsVersion\x12\x12\n\ncarrier_id\x18\x12 \x01(\x03\x12\x15\n\x06is_app\x18\x07 \x01(\x08:\x05\x66\x61lse\x12\x0e\n\x06\x61pp_id\x18\x06 \x01(\t\x12H\n\x12mobile_device_type\x18\x08 \x01(\x0e\x32#.BidRequest.Mobile.MobileDeviceType:\x07UNKNOWN\x12\x14\n\x0cscreen_width\x18\x0f \x01(\x05\x12\x15\n\rscreen_height\x18\x10 \x01(\x05\x12\x1d\n\x12screen_orientation\x18\t \x01(\x05:\x01\x30\x12&\n\x17is_interstitial_request\x18\n \x01(\x08:\x05\x66\x61lse\x12\x18\n\x10\x61pp_category_ids\x18\x0b \x03(\x05\x12&\n\x17is_mobile_web_optimized\x18\x11 \x01(\x08:\x05\x66\x61lse\x12\'\n\x19\x64\x65vice_pixel_ratio_millis\x18\x13 \x01(\x05:\x04\x31\x30\x30\x30\x12 \n\x18\x65ncrypted_advertising_id\x18\x14 \x01(\x0c\x12\x1d\n\x15\x65ncrypted_hashed_idfa\x18\x15 \x01(\x0c\x12\x32\n*constrained_usage_encrypted_advertising_id\x18\x16 \x01(\x0c\x12/\n\'constrained_usage_encrypted_hashed_idfa\x18\x17 \x01(\x0c\x12\x1b\n\x13\x44\x45PRECATED_app_name\x18\x01 \x01(\t\x12\x1f\n\x17\x44\x45PRECATED_company_name\x18\x02 \x01(\t\x12\x1f\n\x17\x44\x45PRECATED_carrier_name\x18\x04 \x01(\t\x12\"\n\x1a\x44\x45PRECATED_carrier_country\x18\x05 \x01(\t\x1a_\n\x0f\x44\x65viceOsVersion\x12\x18\n\x10os_version_major\x18\x01 \x01(\x05\x12\x18\n\x10os_version_minor\x18\x02 \x01(\x05\x12\x18\n\x10os_version_micro\x18\x03 \x01(\x05\">\n\x10MobileDeviceType\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x11\n\rHIGHEND_PHONE\x10\x01\x12\n\n\x06TABLET\x10\x02\"v\n\x11ScreenOrientation\x12\x1e\n\x1aSCREEN_ORIENTATION_UNKNOWN\x10\x00\x12\x1f\n\x1bSCREEN_ORIENTATION_PORTRAIT\x10\x01\x12 \n\x1cSCREEN_ORIENTATION_LANDSCAPE\x10\x02\x1a\x9f\x08\n\x05Video\x12\x17\n\x0f\x64\x65scription_url\x18\n \x01(\t\x12\"\n\x13is_embedded_offsite\x18\x0b \x01(\x08:\x05\x66\x61lse\x12\x1b\n\x13videoad_start_delay\x18\x01 \x01(\x05\x12\x17\n\x0fmax_ad_duration\x18\x02 \x01(\x05\x12\x17\n\x0fmin_ad_duration\x18\x08 \x01(\x05\x12\x42\n\x0einventory_type\x18\x03 \x01(\x0e\x32\x1f.BidRequest.Video.InventoryType:\tWEB_VIDEO\x12V\n\x12video_ad_skippable\x18\x04 \x01(\x0e\x32).BidRequest.Video.SkippableBidRequestType:\x0f\x41LLOW_SKIPPABLE\x12!\n\x19skippable_max_ad_duration\x18\x05 \x01(\x05\x12<\n\x15\x61llowed_video_formats\x18\x06 \x03(\x0e\x32\x1d.BidRequest.Video.VideoFormat\x12\x37\n\x0e\x63ompanion_slot\x18\x07 \x03(\x0b\x32\x1f.BidRequest.Video.CompanionSlot\x12?\n\x12\x63ontent_attributes\x18\t \x01(\x0b\x32#.BidRequest.Video.ContentAttributes\x1a\xcc\x01\n\rCompanionSlot\x12\x12\n\x06height\x18\x01 \x03(\x05\x42\x02\x10\x01\x12\x11\n\x05width\x18\x02 \x03(\x05\x42\x02\x10\x01\x12G\n\x0f\x63reative_format\x18\x03 \x03(\x0e\x32..BidRequest.Video.CompanionSlot.CreativeFormat\"K\n\x0e\x43reativeFormat\x12\x12\n\x0eIMAGE_CREATIVE\x10\x00\x12\x12\n\x0e\x46LASH_CREATIVE\x10\x01\x12\x11\n\rHTML_CREATIVE\x10\x02\x1aN\n\x11\x43ontentAttributes\x12\r\n\x05title\x18\x01 \x01(\t\x12\x18\n\x10\x64uration_seconds\x18\x02 \x01(\x05\x12\x10\n\x08keywords\x18\x03 \x03(\t\"X\n\rInventoryType\x12\r\n\tWEB_VIDEO\x10\x00\x12\t\n\x05GAMES\x10\x01\x12\x17\n\x13MOBILE_INTERSTITIAL\x10\x02\x12\x14\n\x10MOBILE_APP_VIDEO\x10\x03\"Z\n\x17SkippableBidRequestType\x12\x13\n\x0f\x41LLOW_SKIPPABLE\x10\x00\x12\x15\n\x11REQUIRE_SKIPPABLE\x10\x01\x12\x13\n\x0f\x42LOCK_SKIPPABLE\x10\x02\">\n\x0bVideoFormat\x12\x0f\n\x0bVIDEO_FLASH\x10\x00\x12\x0f\n\x0bVIDEO_HTML5\x10\x01\x12\r\n\tYT_HOSTED\x10\x02\x1a\xcf\x07\n\x06\x41\x64Slot\x12\n\n\x02id\x18\x01 \x02(\x05\x12\x14\n\x0c\x61\x64_block_key\x18\x0e \x01(\x04\x12\x1a\n\x12targetable_channel\x18\n \x03(\t\x12\r\n\x05width\x18\x02 \x03(\x05\x12\x0e\n\x06height\x18\x03 \x03(\x05\x12\x1e\n\x12\x65xcluded_attribute\x18\x04 \x03(\x05\x42\x02\x10\x01\x12\x1f\n\x13\x61llowed_vendor_type\x18\x06 \x03(\x05\x42\x02\x10\x01\x12\'\n\x1b\x65xcluded_sensitive_category\x18\x07 \x03(\x05\x42\x02\x10\x01\x12\'\n\x1b\x61llowed_restricted_category\x18\x10 \x03(\x05\x42\x02\x10\x01\x12%\n\x19\x65xcluded_product_category\x18\r \x03(\x05\x42\x02\x10\x01\x12;\n\x10matching_ad_data\x18\t \x03(\x0b\x32!.BidRequest.AdSlot.MatchingAdData\x12\"\n\x1apublisher_settings_list_id\x18\x0f \x01(\x06\x12H\n\x0fslot_visibility\x18\x0c \x01(\x0e\x32!.BidRequest.AdSlot.SlotVisibility:\x0cNO_DETECTION\x12$\n\x1c\x44\x45PRECATED_allowed_attribute\x18\x05 \x03(\x05\x12-\n%DEPRECATED_publisher_settings_list_id\x18\x0b \x03(\x0c\x12-\n%DEPRECATED_excluded_click_through_url\x18\x08 \x03(\t\x1a\xb2\x02\n\x0eMatchingAdData\x12\x12\n\nadgroup_id\x18\x02 \x01(\x03\x12\x1a\n\x12minimum_cpm_micros\x18\x05 \x01(\x03\x12\x41\n\x0b\x64irect_deal\x18\x06 \x03(\x0b\x32,.BidRequest.AdSlot.MatchingAdData.DirectDeal\x12\x1e\n\x16\x44\x45PRECATED_campaign_id\x18\x01 \x01(\x03\x12(\n DEPRECATED_per_buyer_minimum_cpm\x18\x03 \x01(\x08\x12#\n\x1b\x44\x45PRECATED_fixed_cpm_micros\x18\x04 \x01(\x03\x1a>\n\nDirectDeal\x12\x16\n\x0e\x64irect_deal_id\x18\x01 \x01(\x03\x12\x18\n\x10\x66ixed_cpm_micros\x18\x02 \x01(\x03\"J\n\x0eSlotVisibility\x12\x10\n\x0cNO_DETECTION\x10\x00\x12\x12\n\x0e\x41\x42OVE_THE_FOLD\x10\x01\x12\x12\n\x0e\x42\x45LOW_THE_FOLD\x10\x02\x1as\n\x13\x42idResponseFeedback\x12\x12\n\nrequest_id\x18\x01 \x01(\x0c\x12\x16\n\x0e\x63reative_index\x18\x02 \x01(\x05\x12\x1c\n\x14\x63reative_status_code\x18\x03 \x01(\x05\x12\x12\n\ncpm_micros\x18\x04 \x01(\x03\x1aS\n\x0fMatchingNetwork\x12\x1d\n\x15\x44\x45PRECATED_network_id\x18\x01 \x01(\t\x12!\n\x19\x44\x45PRECATED_google_user_id\x18\x02 \x01(\t\"9\n\x11UserDataTreatment\x12$\n TAG_FOR_CHILD_DIRECTED_TREATMENT\x10\x00\"\x95\x07\n\x0b\x42idResponse\x12\x1b\n\x02\x61\x64\x18\x02 \x03(\x0b\x32\x0f.BidResponse.Ad\x12\x14\n\x0c\x64\x65\x62ug_string\x18\x05 \x01(\t\x12\x1a\n\x12processing_time_ms\x18\x04 \x01(\x05\x12#\n\x1b\x44\x45PRECATED_protocol_version\x18\x01 \x01(\x05\x1a\x91\x06\n\x02\x41\x64\x12\x19\n\x11\x62uyer_creative_id\x18\n \x01(\t\x12\x14\n\x0chtml_snippet\x18\x01 \x01(\t\x12\x11\n\tvideo_url\x18\t \x01(\t\x12\x18\n\x10snippet_template\x18\x0c \x01(\t\x12=\n\x12template_parameter\x18\r \x03(\x0b\x32!.BidResponse.Ad.TemplateParameter\x12\x19\n\x11\x63lick_through_url\x18\x04 \x03(\t\x12\x13\n\x0bvendor_type\x18\x05 \x03(\x05\x12\x11\n\tattribute\x18\x06 \x03(\x05\x12\x10\n\x08\x63\x61tegory\x18\x07 \x03(\x05\x12\x1b\n\x13restricted_category\x18\x11 \x03(\x05\x12\x17\n\x0f\x61\x64vertiser_name\x18\x0b \x03(\t\x12\r\n\x05width\x18\x0e \x01(\x05\x12\x0e\n\x06height\x18\x0f \x01(\x05\x12\x11\n\tagency_id\x18\x10 \x01(\x03\x12&\n\x06\x61\x64slot\x18\x03 \x03(\x0b\x32\x16.BidResponse.Ad.AdSlot\x12\x1e\n\x16\x44\x45PRECATED_creative_id\x18\x08 \x01(\x03\x12$\n\x1c\x44\x45PRECATED_click_through_url\x18\x02 \x01(\t\x1a\xd4\x01\n\x11TemplateParameter\x12\x17\n\x0fparameter_value\x18\x01 \x01(\t\x12 \n\x18\x62lank_ad_parameter_value\x18\x08 \x01(\t\x12\x19\n\x11\x62uyer_creative_id\x18\x02 \x01(\t\x12\x19\n\x11\x63lick_through_url\x18\x03 \x01(\t\x12\x0c\n\x04left\x18\x04 \x01(\x05\x12\r\n\x05right\x18\x05 \x01(\x05\x12\x0b\n\x03top\x18\x06 \x01(\x05\x12\x0e\n\x06\x62ottom\x18\x07 \x01(\x05\x12\x14\n\x0c\x62\x61\x63kup_index\x18\t \x01(\x05\x1al\n\x06\x41\x64Slot\x12\n\n\x02id\x18\x01 \x02(\x05\x12\x16\n\x0emax_cpm_micros\x18\x02 \x02(\x03\x12\x16\n\x0emin_cpm_micros\x18\x03 \x01(\x03\x12\x12\n\nadgroup_id\x18\x04 \x01(\x03\x12\x12\n\x07\x64\x65\x61l_id\x18\x05 \x01(\x03:\x01\x30')
+  serialized_pb='\n\x16realtime-bidding.proto\"\x8c-\n\nBidRequest\x12\n\n\x02id\x18\x02 \x02(\x0c\x12\n\n\x02ip\x18\x04 \x01(\x0c\x12:\n\x13user_data_treatment\x18\x31 \x03(\x0e\x32\x1d.BidRequest.UserDataTreatment\x12\x16\n\x0egoogle_user_id\x18\x15 \x01(\t\x12(\n constrained_usage_google_user_id\x18/ \x01(\t\x12\x16\n\x0e\x63ookie_version\x18\x14 \x01(\r\x12\x1a\n\x12\x63ookie_age_seconds\x18\x1f \x01(\x05\x12\x19\n\x11hosted_match_data\x18% \x01(\x0c\x12+\n#constrained_usage_hosted_match_data\x18\x30 \x01(\x0c\x12\x12\n\nuser_agent\x18\x06 \x01(\t\x12\x17\n\x0fgeo_criteria_id\x18\' \x01(\x05\x12\x13\n\x0bpostal_code\x18! \x01(\t\x12\x1a\n\x12postal_code_prefix\x18\" \x01(\t\x12 \n\x18\x65ncrypted_hyperlocal_set\x18( \x01(\x0c\x12\x17\n\x0ftimezone_offset\x18\x19 \x01(\x05\x12\x19\n\ruser_vertical\x18\x1e \x03(\x05\x42\x02\x10\x01\x12\x35\n\x10user_demographic\x18\x32 \x01(\x0b\x32\x1b.BidRequest.UserDemographic\x12\'\n\tuser_list\x18  \x03(\x0b\x32\x14.BidRequest.UserList\x12\x19\n\x11seller_network_id\x18) \x01(\x05\x12\x0b\n\x03url\x18\x0b \x01(\t\x12\x14\n\x0c\x61nonymous_id\x18\x13 \x01(\t\x12\x19\n\x11\x64\x65tected_language\x18\x0c \x03(\t\x12/\n\x11\x64\x65tected_vertical\x18\r \x03(\x0b\x32\x14.BidRequest.Vertical\x12#\n\x1bvertical_dictionary_version\x18\x18 \x01(\x05\x12\"\n\x16\x64\x65tected_content_label\x18\x1a \x03(\x05\x42\x02\x10\x01\x12\x14\n\x0csite_list_id\x18$ \x03(\x05\x12\'\n\tkey_value\x18& \x03(\x0b\x32\x14.BidRequest.KeyValue\x12\"\n\x06mobile\x18\x1c \x01(\x0b\x32\x12.BidRequest.Mobile\x12 \n\x05video\x18\x1d \x01(\x0b\x32\x11.BidRequest.Video\x12\"\n\x1apublisher_settings_list_id\x18* \x01(\x06\x12\"\n\x06\x61\x64slot\x18\x0e \x03(\x0b\x32\x12.BidRequest.AdSlot\x12>\n\x15\x62id_response_feedback\x18, \x03(\x0b\x32\x1f.BidRequest.BidResponseFeedback\x12\x16\n\x07is_test\x18\x0f \x01(\x08:\x05\x66\x61lse\x12\x16\n\x07is_ping\x18\x11 \x01(\x08:\x05\x66\x61lse\x12)\n\x1ais_predicted_to_be_ignored\x18- \x01(\x08:\x05\x66\x61lse\x12#\n\x1b\x44\x45PRECATED_protocol_version\x18\x01 \x01(\x05\x12%\n\x1d\x44\x45PRECATED_click_tracking_url\x18\x03 \x01(\t\x12\x19\n\x11\x44\x45PRECATED_cookie\x18\x05 \x01(\x04\x12\x1a\n\x12\x44\x45PRECATED_country\x18\x07 \x01(\t\x12\x19\n\x11\x44\x45PRECATED_region\x18\x08 \x01(\t\x12\x17\n\x0f\x44\x45PRECATED_city\x18\t \x01(\t\x12\x18\n\x10\x44\x45PRECATED_metro\x18\n \x01(\x05\x12 \n\x18\x44\x45PRECATED_hashed_cookie\x18\x10 \x01(\x0c\x12-\n%DEPRECATED_excluded_click_through_url\x18\x12 \x03(\t\x12!\n\x19\x44\x45PRECATED_seller_network\x18\x16 \x01(\t\x12-\n%DEPRECATED_publisher_settings_list_id\x18\x17 \x01(\x0c\x12@\n\x1b\x44\x45PRECATED_matching_network\x18\x1b \x03(\x0b\x32\x1b.BidRequest.MatchingNetwork\x12/\n DEPRECATED_experimental_deadline\x18# \x01(\x08:\x05\x66\x61lse\x1ai\n\nHyperlocal\x12-\n\x07\x63orners\x18\x01 \x03(\x0b\x32\x1c.BidRequest.Hyperlocal.Point\x1a,\n\x05Point\x12\x10\n\x08latitude\x18\x01 \x01(\x02\x12\x11\n\tlongitude\x18\x02 \x01(\x02\x1ao\n\rHyperlocalSet\x12*\n\nhyperlocal\x18\x01 \x03(\x0b\x32\x16.BidRequest.Hyperlocal\x12\x32\n\x0c\x63\x65nter_point\x18\x02 \x01(\x0b\x32\x1c.BidRequest.Hyperlocal.Point\x1a\xa6\x01\n\x0fUserDemographic\x12;\n\x06gender\x18\x01 \x01(\x0e\x32\".BidRequest.UserDemographic.Gender:\x07UNKNOWN\x12\x12\n\x07\x61ge_low\x18\x02 \x01(\x05:\x01\x30\x12\x15\n\x08\x61ge_high\x18\x03 \x01(\x05:\x03\x39\x39\x39\"+\n\x06Gender\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x08\n\x04MALE\x10\x01\x12\n\n\x06\x46\x45MALE\x10\x02\x1a+\n\x08UserList\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x13\n\x0b\x61ge_seconds\x18\x02 \x01(\x05\x1a&\n\x08Vertical\x12\n\n\x02id\x18\x01 \x02(\x05\x12\x0e\n\x06weight\x18\x02 \x02(\x02\x1a&\n\x08KeyValue\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\x1a\xbc\x08\n\x06Mobile\x12\x10\n\x08platform\x18\x03 \x01(\t\x12\r\n\x05\x62rand\x18\x0c \x01(\t\x12\r\n\x05model\x18\r \x01(\t\x12\x36\n\nos_version\x18\x0e \x01(\x0b\x32\".BidRequest.Mobile.DeviceOsVersion\x12\x12\n\ncarrier_id\x18\x12 \x01(\x03\x12\x15\n\x06is_app\x18\x07 \x01(\x08:\x05\x66\x61lse\x12\x0e\n\x06\x61pp_id\x18\x06 \x01(\t\x12H\n\x12mobile_device_type\x18\x08 \x01(\x0e\x32#.BidRequest.Mobile.MobileDeviceType:\x07UNKNOWN\x12\x14\n\x0cscreen_width\x18\x0f \x01(\x05\x12\x15\n\rscreen_height\x18\x10 \x01(\x05\x12\x1d\n\x12screen_orientation\x18\t \x01(\x05:\x01\x30\x12&\n\x17is_interstitial_request\x18\n \x01(\x08:\x05\x66\x61lse\x12\x18\n\x10\x61pp_category_ids\x18\x0b \x03(\x05\x12&\n\x17is_mobile_web_optimized\x18\x11 \x01(\x08:\x05\x66\x61lse\x12\'\n\x19\x64\x65vice_pixel_ratio_millis\x18\x13 \x01(\x05:\x04\x31\x30\x30\x30\x12 \n\x18\x65ncrypted_advertising_id\x18\x14 \x01(\x0c\x12\x1d\n\x15\x65ncrypted_hashed_idfa\x18\x15 \x01(\x0c\x12\x32\n*constrained_usage_encrypted_advertising_id\x18\x16 \x01(\x0c\x12/\n\'constrained_usage_encrypted_hashed_idfa\x18\x17 \x01(\x0c\x12\x10\n\x08\x61pp_name\x18\x18 \x01(\t\x12\x12\n\napp_rating\x18\x19 \x01(\x02\x12\x1b\n\x13\x44\x45PRECATED_app_name\x18\x01 \x01(\t\x12\x1f\n\x17\x44\x45PRECATED_company_name\x18\x02 \x01(\t\x12\x1f\n\x17\x44\x45PRECATED_carrier_name\x18\x04 \x01(\t\x12\"\n\x1a\x44\x45PRECATED_carrier_country\x18\x05 \x01(\t\x1a_\n\x0f\x44\x65viceOsVersion\x12\x18\n\x10os_version_major\x18\x01 \x01(\x05\x12\x18\n\x10os_version_minor\x18\x02 \x01(\x05\x12\x18\n\x10os_version_micro\x18\x03 \x01(\x05\">\n\x10MobileDeviceType\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x11\n\rHIGHEND_PHONE\x10\x01\x12\n\n\x06TABLET\x10\x02\"v\n\x11ScreenOrientation\x12\x1e\n\x1aSCREEN_ORIENTATION_UNKNOWN\x10\x00\x12\x1f\n\x1bSCREEN_ORIENTATION_PORTRAIT\x10\x01\x12 \n\x1cSCREEN_ORIENTATION_LANDSCAPE\x10\x02\x1a\x9f\x08\n\x05Video\x12\x17\n\x0f\x64\x65scription_url\x18\n \x01(\t\x12\"\n\x13is_embedded_offsite\x18\x0b \x01(\x08:\x05\x66\x61lse\x12\x1b\n\x13videoad_start_delay\x18\x01 \x01(\x05\x12\x17\n\x0fmax_ad_duration\x18\x02 \x01(\x05\x12\x17\n\x0fmin_ad_duration\x18\x08 \x01(\x05\x12\x42\n\x0einventory_type\x18\x03 \x01(\x0e\x32\x1f.BidRequest.Video.InventoryType:\tWEB_VIDEO\x12V\n\x12video_ad_skippable\x18\x04 \x01(\x0e\x32).BidRequest.Video.SkippableBidRequestType:\x0f\x41LLOW_SKIPPABLE\x12!\n\x19skippable_max_ad_duration\x18\x05 \x01(\x05\x12<\n\x15\x61llowed_video_formats\x18\x06 \x03(\x0e\x32\x1d.BidRequest.Video.VideoFormat\x12\x37\n\x0e\x63ompanion_slot\x18\x07 \x03(\x0b\x32\x1f.BidRequest.Video.CompanionSlot\x12?\n\x12\x63ontent_attributes\x18\t \x01(\x0b\x32#.BidRequest.Video.ContentAttributes\x1a\xcc\x01\n\rCompanionSlot\x12\x12\n\x06height\x18\x01 \x03(\x05\x42\x02\x10\x01\x12\x11\n\x05width\x18\x02 \x03(\x05\x42\x02\x10\x01\x12G\n\x0f\x63reative_format\x18\x03 \x03(\x0e\x32..BidRequest.Video.CompanionSlot.CreativeFormat\"K\n\x0e\x43reativeFormat\x12\x12\n\x0eIMAGE_CREATIVE\x10\x00\x12\x12\n\x0e\x46LASH_CREATIVE\x10\x01\x12\x11\n\rHTML_CREATIVE\x10\x02\x1aN\n\x11\x43ontentAttributes\x12\r\n\x05title\x18\x01 \x01(\t\x12\x18\n\x10\x64uration_seconds\x18\x02 \x01(\x05\x12\x10\n\x08keywords\x18\x03 \x03(\t\"X\n\rInventoryType\x12\r\n\tWEB_VIDEO\x10\x00\x12\t\n\x05GAMES\x10\x01\x12\x17\n\x13MOBILE_INTERSTITIAL\x10\x02\x12\x14\n\x10MOBILE_APP_VIDEO\x10\x03\"Z\n\x17SkippableBidRequestType\x12\x13\n\x0f\x41LLOW_SKIPPABLE\x10\x00\x12\x15\n\x11REQUIRE_SKIPPABLE\x10\x01\x12\x13\n\x0f\x42LOCK_SKIPPABLE\x10\x02\">\n\x0bVideoFormat\x12\x0f\n\x0bVIDEO_FLASH\x10\x00\x12\x0f\n\x0bVIDEO_HTML5\x10\x01\x12\r\n\tYT_HOSTED\x10\x02\x1a\xcd\t\n\x06\x41\x64Slot\x12\n\n\x02id\x18\x01 \x02(\x05\x12\x14\n\x0c\x61\x64_block_key\x18\x0e \x01(\x04\x12\x1a\n\x12targetable_channel\x18\n \x03(\t\x12\r\n\x05width\x18\x02 \x03(\x05\x12\x0e\n\x06height\x18\x03 \x03(\x05\x12\x1e\n\x12\x65xcluded_attribute\x18\x04 \x03(\x05\x42\x02\x10\x01\x12\x1f\n\x13\x61llowed_vendor_type\x18\x06 \x03(\x05\x42\x02\x10\x01\x12\'\n\x1b\x65xcluded_sensitive_category\x18\x07 \x03(\x05\x42\x02\x10\x01\x12\'\n\x1b\x61llowed_restricted_category\x18\x10 \x03(\x05\x42\x02\x10\x01\x12%\n\x19\x65xcluded_product_category\x18\r \x03(\x05\x42\x02\x10\x01\x12;\n\x10matching_ad_data\x18\t \x03(\x0b\x32!.BidRequest.AdSlot.MatchingAdData\x12\"\n\x1apublisher_settings_list_id\x18\x0f \x01(\x06\x12H\n\x0fslot_visibility\x18\x0c \x01(\x0e\x32!.BidRequest.AdSlot.SlotVisibility:\x0cNO_DETECTION\x12$\n\x1c\x44\x45PRECATED_allowed_attribute\x18\x05 \x03(\x05\x12-\n%DEPRECATED_publisher_settings_list_id\x18\x0b \x03(\x0c\x12-\n%DEPRECATED_excluded_click_through_url\x18\x08 \x03(\t\x1a\xb0\x04\n\x0eMatchingAdData\x12\x12\n\nadgroup_id\x18\x02 \x01(\x03\x12\x1a\n\x12minimum_cpm_micros\x18\x05 \x01(\x03\x12H\n\x0cpricing_rule\x18\x07 \x03(\x0b\x32\x32.BidRequest.AdSlot.MatchingAdData.BuyerPricingRule\x12\x41\n\x0b\x64irect_deal\x18\x06 \x03(\x0b\x32,.BidRequest.AdSlot.MatchingAdData.DirectDeal\x12\x1e\n\x16\x44\x45PRECATED_campaign_id\x18\x01 \x01(\x03\x12(\n DEPRECATED_per_buyer_minimum_cpm\x18\x03 \x01(\x08\x12#\n\x1b\x44\x45PRECATED_fixed_cpm_micros\x18\x04 \x01(\x03\x1a\xb1\x01\n\x10\x42uyerPricingRule\x12\x1c\n\x14included_advertisers\x18\x01 \x03(\x03\x12\x1c\n\x14\x65xcluded_advertisers\x18\x02 \x03(\x03\x12\x19\n\x11included_agencies\x18\x03 \x03(\x03\x12\x19\n\x11\x65xcluded_agencies\x18\x04 \x03(\x03\x12\x0f\n\x07\x62locked\x18\x05 \x01(\x08\x12\x1a\n\x12minimum_cpm_micros\x18\x06 \x01(\x03\x1a>\n\nDirectDeal\x12\x16\n\x0e\x64irect_deal_id\x18\x01 \x01(\x03\x12\x18\n\x10\x66ixed_cpm_micros\x18\x02 \x01(\x03\"J\n\x0eSlotVisibility\x12\x10\n\x0cNO_DETECTION\x10\x00\x12\x12\n\x0e\x41\x42OVE_THE_FOLD\x10\x01\x12\x12\n\x0e\x42\x45LOW_THE_FOLD\x10\x02\x1as\n\x13\x42idResponseFeedback\x12\x12\n\nrequest_id\x18\x01 \x01(\x0c\x12\x16\n\x0e\x63reative_index\x18\x02 \x01(\x05\x12\x1c\n\x14\x63reative_status_code\x18\x03 \x01(\x05\x12\x12\n\ncpm_micros\x18\x04 \x01(\x03\x1aS\n\x0fMatchingNetwork\x12\x1d\n\x15\x44\x45PRECATED_network_id\x18\x01 \x01(\t\x12!\n\x19\x44\x45PRECATED_google_user_id\x18\x02 \x01(\t\"9\n\x11UserDataTreatment\x12$\n TAG_FOR_CHILD_DIRECTED_TREATMENT\x10\x00\"\x95\x07\n\x0b\x42idResponse\x12\x1b\n\x02\x61\x64\x18\x02 \x03(\x0b\x32\x0f.BidResponse.Ad\x12\x14\n\x0c\x64\x65\x62ug_string\x18\x05 \x01(\t\x12\x1a\n\x12processing_time_ms\x18\x04 \x01(\x05\x12#\n\x1b\x44\x45PRECATED_protocol_version\x18\x01 \x01(\x05\x1a\x91\x06\n\x02\x41\x64\x12\x19\n\x11\x62uyer_creative_id\x18\n \x01(\t\x12\x14\n\x0chtml_snippet\x18\x01 \x01(\t\x12\x11\n\tvideo_url\x18\t \x01(\t\x12\x18\n\x10snippet_template\x18\x0c \x01(\t\x12=\n\x12template_parameter\x18\r \x03(\x0b\x32!.BidResponse.Ad.TemplateParameter\x12\x19\n\x11\x63lick_through_url\x18\x04 \x03(\t\x12\x13\n\x0bvendor_type\x18\x05 \x03(\x05\x12\x11\n\tattribute\x18\x06 \x03(\x05\x12\x10\n\x08\x63\x61tegory\x18\x07 \x03(\x05\x12\x1b\n\x13restricted_category\x18\x11 \x03(\x05\x12\x17\n\x0f\x61\x64vertiser_name\x18\x0b \x03(\t\x12\r\n\x05width\x18\x0e \x01(\x05\x12\x0e\n\x06height\x18\x0f \x01(\x05\x12\x11\n\tagency_id\x18\x10 \x01(\x03\x12&\n\x06\x61\x64slot\x18\x03 \x03(\x0b\x32\x16.BidResponse.Ad.AdSlot\x12\x1e\n\x16\x44\x45PRECATED_creative_id\x18\x08 \x01(\x03\x12$\n\x1c\x44\x45PRECATED_click_through_url\x18\x02 \x01(\t\x1a\xd4\x01\n\x11TemplateParameter\x12\x17\n\x0fparameter_value\x18\x01 \x01(\t\x12 \n\x18\x62lank_ad_parameter_value\x18\x08 \x01(\t\x12\x19\n\x11\x62uyer_creative_id\x18\x02 \x01(\t\x12\x19\n\x11\x63lick_through_url\x18\x03 \x01(\t\x12\x0c\n\x04left\x18\x04 \x01(\x05\x12\r\n\x05right\x18\x05 \x01(\x05\x12\x0b\n\x03top\x18\x06 \x01(\x05\x12\x0e\n\x06\x62ottom\x18\x07 \x01(\x05\x12\x14\n\x0c\x62\x61\x63kup_index\x18\t \x01(\x05\x1al\n\x06\x41\x64Slot\x12\n\n\x02id\x18\x01 \x02(\x05\x12\x16\n\x0emax_cpm_micros\x18\x02 \x02(\x03\x12\x16\n\x0emin_cpm_micros\x18\x03 \x01(\x03\x12\x12\n\nadgroup_id\x18\x04 \x01(\x03\x12\x12\n\x07\x64\x65\x61l_id\x18\x05 \x01(\x03:\x01\x30')
 
 
+
+_BIDREQUEST_USERDEMOGRAPHIC_GENDER = descriptor.EnumDescriptor(
+  name='Gender',
+  full_name='BidRequest.UserDemographic.Gender',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    descriptor.EnumValueDescriptor(
+      name='UNKNOWN', index=0, number=0,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='MALE', index=1, number=1,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='FEMALE', index=2, number=2,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=1993,
+  serialized_end=2036,
+)
 
 _BIDREQUEST_MOBILE_MOBILEDEVICETYPE = descriptor.EnumDescriptor(
   name='MobileDeviceType',
@@ -36,8 +61,8 @@ _BIDREQUEST_MOBILE_MOBILEDEVICETYPE = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2804,
-  serialized_end=2866,
+  serialized_start=3066,
+  serialized_end=3128,
 )
 
 _BIDREQUEST_MOBILE_SCREENORIENTATION = descriptor.EnumDescriptor(
@@ -61,8 +86,8 @@ _BIDREQUEST_MOBILE_SCREENORIENTATION = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2868,
-  serialized_end=2986,
+  serialized_start=3130,
+  serialized_end=3248,
 )
 
 _BIDREQUEST_VIDEO_COMPANIONSLOT_CREATIVEFORMAT = descriptor.EnumDescriptor(
@@ -86,8 +111,8 @@ _BIDREQUEST_VIDEO_COMPANIONSLOT_CREATIVEFORMAT = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=3643,
-  serialized_end=3718,
+  serialized_start=3905,
+  serialized_end=3980,
 )
 
 _BIDREQUEST_VIDEO_INVENTORYTYPE = descriptor.EnumDescriptor(
@@ -115,8 +140,8 @@ _BIDREQUEST_VIDEO_INVENTORYTYPE = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=3800,
-  serialized_end=3888,
+  serialized_start=4062,
+  serialized_end=4150,
 )
 
 _BIDREQUEST_VIDEO_SKIPPABLEBIDREQUESTTYPE = descriptor.EnumDescriptor(
@@ -140,8 +165,8 @@ _BIDREQUEST_VIDEO_SKIPPABLEBIDREQUESTTYPE = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=3890,
-  serialized_end=3980,
+  serialized_start=4152,
+  serialized_end=4242,
 )
 
 _BIDREQUEST_VIDEO_VIDEOFORMAT = descriptor.EnumDescriptor(
@@ -165,8 +190,8 @@ _BIDREQUEST_VIDEO_VIDEOFORMAT = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=3982,
-  serialized_end=4044,
+  serialized_start=4244,
+  serialized_end=4306,
 )
 
 _BIDREQUEST_ADSLOT_SLOTVISIBILITY = descriptor.EnumDescriptor(
@@ -190,8 +215,8 @@ _BIDREQUEST_ADSLOT_SLOTVISIBILITY = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=4948,
-  serialized_end=5022,
+  serialized_start=5464,
+  serialized_end=5538,
 )
 
 _BIDREQUEST_USERDATATREATMENT = descriptor.EnumDescriptor(
@@ -207,8 +232,8 @@ _BIDREQUEST_USERDATATREATMENT = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=5226,
-  serialized_end=5283,
+  serialized_start=5742,
+  serialized_end=5799,
 )
 
 
@@ -242,8 +267,8 @@ _BIDREQUEST_HYPERLOCAL_POINT = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1655,
-  serialized_end=1699,
+  serialized_start=1710,
+  serialized_end=1754,
 )
 
 _BIDREQUEST_HYPERLOCAL = descriptor.Descriptor(
@@ -269,8 +294,8 @@ _BIDREQUEST_HYPERLOCAL = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1594,
-  serialized_end=1699,
+  serialized_start=1649,
+  serialized_end=1754,
 )
 
 _BIDREQUEST_HYPERLOCALSET = descriptor.Descriptor(
@@ -303,8 +328,50 @@ _BIDREQUEST_HYPERLOCALSET = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1701,
-  serialized_end=1812,
+  serialized_start=1756,
+  serialized_end=1867,
+)
+
+_BIDREQUEST_USERDEMOGRAPHIC = descriptor.Descriptor(
+  name='UserDemographic',
+  full_name='BidRequest.UserDemographic',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='gender', full_name='BidRequest.UserDemographic.gender', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=True, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='age_low', full_name='BidRequest.UserDemographic.age_low', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=True, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='age_high', full_name='BidRequest.UserDemographic.age_high', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=True, default_value=999,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+    _BIDREQUEST_USERDEMOGRAPHIC_GENDER,
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=1870,
+  serialized_end=2036,
 )
 
 _BIDREQUEST_USERLIST = descriptor.Descriptor(
@@ -337,8 +404,8 @@ _BIDREQUEST_USERLIST = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1814,
-  serialized_end=1857,
+  serialized_start=2038,
+  serialized_end=2081,
 )
 
 _BIDREQUEST_VERTICAL = descriptor.Descriptor(
@@ -371,8 +438,8 @@ _BIDREQUEST_VERTICAL = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1859,
-  serialized_end=1897,
+  serialized_start=2083,
+  serialized_end=2121,
 )
 
 _BIDREQUEST_KEYVALUE = descriptor.Descriptor(
@@ -405,8 +472,8 @@ _BIDREQUEST_KEYVALUE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1899,
-  serialized_end=1937,
+  serialized_start=2123,
+  serialized_end=2161,
 )
 
 _BIDREQUEST_MOBILE_DEVICEOSVERSION = descriptor.Descriptor(
@@ -446,8 +513,8 @@ _BIDREQUEST_MOBILE_DEVICEOSVERSION = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=2707,
-  serialized_end=2802,
+  serialized_start=2969,
+  serialized_end=3064,
 )
 
 _BIDREQUEST_MOBILE = descriptor.Descriptor(
@@ -591,28 +658,42 @@ _BIDREQUEST_MOBILE = descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_app_name', full_name='BidRequest.Mobile.DEPRECATED_app_name', index=19,
+      name='app_name', full_name='BidRequest.Mobile.app_name', index=19,
+      number=24, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='app_rating', full_name='BidRequest.Mobile.app_rating', index=20,
+      number=25, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='DEPRECATED_app_name', full_name='BidRequest.Mobile.DEPRECATED_app_name', index=21,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=unicode("", "utf-8"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_company_name', full_name='BidRequest.Mobile.DEPRECATED_company_name', index=20,
+      name='DEPRECATED_company_name', full_name='BidRequest.Mobile.DEPRECATED_company_name', index=22,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=unicode("", "utf-8"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_carrier_name', full_name='BidRequest.Mobile.DEPRECATED_carrier_name', index=21,
+      name='DEPRECATED_carrier_name', full_name='BidRequest.Mobile.DEPRECATED_carrier_name', index=23,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=unicode("", "utf-8"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_carrier_country', full_name='BidRequest.Mobile.DEPRECATED_carrier_country', index=22,
+      name='DEPRECATED_carrier_country', full_name='BidRequest.Mobile.DEPRECATED_carrier_country', index=24,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=unicode("", "utf-8"),
       message_type=None, enum_type=None, containing_type=None,
@@ -629,8 +710,8 @@ _BIDREQUEST_MOBILE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1940,
-  serialized_end=2986,
+  serialized_start=2164,
+  serialized_end=3248,
 )
 
 _BIDREQUEST_VIDEO_COMPANIONSLOT = descriptor.Descriptor(
@@ -671,8 +752,8 @@ _BIDREQUEST_VIDEO_COMPANIONSLOT = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=3514,
-  serialized_end=3718,
+  serialized_start=3776,
+  serialized_end=3980,
 )
 
 _BIDREQUEST_VIDEO_CONTENTATTRIBUTES = descriptor.Descriptor(
@@ -712,8 +793,8 @@ _BIDREQUEST_VIDEO_CONTENTATTRIBUTES = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=3720,
-  serialized_end=3798,
+  serialized_start=3982,
+  serialized_end=4060,
 )
 
 _BIDREQUEST_VIDEO = descriptor.Descriptor(
@@ -812,8 +893,70 @@ _BIDREQUEST_VIDEO = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=2989,
-  serialized_end=4044,
+  serialized_start=3251,
+  serialized_end=4306,
+)
+
+_BIDREQUEST_ADSLOT_MATCHINGADDATA_BUYERPRICINGRULE = descriptor.Descriptor(
+  name='BuyerPricingRule',
+  full_name='BidRequest.AdSlot.MatchingAdData.BuyerPricingRule',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='included_advertisers', full_name='BidRequest.AdSlot.MatchingAdData.BuyerPricingRule.included_advertisers', index=0,
+      number=1, type=3, cpp_type=2, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='excluded_advertisers', full_name='BidRequest.AdSlot.MatchingAdData.BuyerPricingRule.excluded_advertisers', index=1,
+      number=2, type=3, cpp_type=2, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='included_agencies', full_name='BidRequest.AdSlot.MatchingAdData.BuyerPricingRule.included_agencies', index=2,
+      number=3, type=3, cpp_type=2, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='excluded_agencies', full_name='BidRequest.AdSlot.MatchingAdData.BuyerPricingRule.excluded_agencies', index=3,
+      number=4, type=3, cpp_type=2, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='blocked', full_name='BidRequest.AdSlot.MatchingAdData.BuyerPricingRule.blocked', index=4,
+      number=5, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='minimum_cpm_micros', full_name='BidRequest.AdSlot.MatchingAdData.BuyerPricingRule.minimum_cpm_micros', index=5,
+      number=6, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=5221,
+  serialized_end=5398,
 )
 
 _BIDREQUEST_ADSLOT_MATCHINGADDATA_DIRECTDEAL = descriptor.Descriptor(
@@ -846,8 +989,8 @@ _BIDREQUEST_ADSLOT_MATCHINGADDATA_DIRECTDEAL = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=4884,
-  serialized_end=4946,
+  serialized_start=5400,
+  serialized_end=5462,
 )
 
 _BIDREQUEST_ADSLOT_MATCHINGADDATA = descriptor.Descriptor(
@@ -872,28 +1015,35 @@ _BIDREQUEST_ADSLOT_MATCHINGADDATA = descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='direct_deal', full_name='BidRequest.AdSlot.MatchingAdData.direct_deal', index=2,
+      name='pricing_rule', full_name='BidRequest.AdSlot.MatchingAdData.pricing_rule', index=2,
+      number=7, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='direct_deal', full_name='BidRequest.AdSlot.MatchingAdData.direct_deal', index=3,
       number=6, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_campaign_id', full_name='BidRequest.AdSlot.MatchingAdData.DEPRECATED_campaign_id', index=3,
+      name='DEPRECATED_campaign_id', full_name='BidRequest.AdSlot.MatchingAdData.DEPRECATED_campaign_id', index=4,
       number=1, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_per_buyer_minimum_cpm', full_name='BidRequest.AdSlot.MatchingAdData.DEPRECATED_per_buyer_minimum_cpm', index=4,
+      name='DEPRECATED_per_buyer_minimum_cpm', full_name='BidRequest.AdSlot.MatchingAdData.DEPRECATED_per_buyer_minimum_cpm', index=5,
       number=3, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_fixed_cpm_micros', full_name='BidRequest.AdSlot.MatchingAdData.DEPRECATED_fixed_cpm_micros', index=5,
+      name='DEPRECATED_fixed_cpm_micros', full_name='BidRequest.AdSlot.MatchingAdData.DEPRECATED_fixed_cpm_micros', index=6,
       number=4, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -902,14 +1052,14 @@ _BIDREQUEST_ADSLOT_MATCHINGADDATA = descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_BIDREQUEST_ADSLOT_MATCHINGADDATA_DIRECTDEAL, ],
+  nested_types=[_BIDREQUEST_ADSLOT_MATCHINGADDATA_BUYERPRICINGRULE, _BIDREQUEST_ADSLOT_MATCHINGADDATA_DIRECTDEAL, ],
   enum_types=[
   ],
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=4640,
-  serialized_end=4946,
+  serialized_start=4902,
+  serialized_end=5462,
 )
 
 _BIDREQUEST_ADSLOT = descriptor.Descriptor(
@@ -1041,8 +1191,8 @@ _BIDREQUEST_ADSLOT = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=4047,
-  serialized_end=5022,
+  serialized_start=4309,
+  serialized_end=5538,
 )
 
 _BIDREQUEST_BIDRESPONSEFEEDBACK = descriptor.Descriptor(
@@ -1089,8 +1239,8 @@ _BIDREQUEST_BIDRESPONSEFEEDBACK = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=5024,
-  serialized_end=5139,
+  serialized_start=5540,
+  serialized_end=5655,
 )
 
 _BIDREQUEST_MATCHINGNETWORK = descriptor.Descriptor(
@@ -1123,8 +1273,8 @@ _BIDREQUEST_MATCHINGNETWORK = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=5141,
-  serialized_end=5224,
+  serialized_start=5657,
+  serialized_end=5740,
 )
 
 _BIDREQUEST = descriptor.Descriptor(
@@ -1247,217 +1397,224 @@ _BIDREQUEST = descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=descriptor._ParseOptions(descriptor_pb2.FieldOptions(), '\020\001')),
     descriptor.FieldDescriptor(
-      name='user_list', full_name='BidRequest.user_list', index=16,
+      name='user_demographic', full_name='BidRequest.user_demographic', index=16,
+      number=50, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='user_list', full_name='BidRequest.user_list', index=17,
       number=32, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='seller_network_id', full_name='BidRequest.seller_network_id', index=17,
+      name='seller_network_id', full_name='BidRequest.seller_network_id', index=18,
       number=41, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='url', full_name='BidRequest.url', index=18,
+      name='url', full_name='BidRequest.url', index=19,
       number=11, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=unicode("", "utf-8"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='anonymous_id', full_name='BidRequest.anonymous_id', index=19,
+      name='anonymous_id', full_name='BidRequest.anonymous_id', index=20,
       number=19, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=unicode("", "utf-8"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='detected_language', full_name='BidRequest.detected_language', index=20,
+      name='detected_language', full_name='BidRequest.detected_language', index=21,
       number=12, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='detected_vertical', full_name='BidRequest.detected_vertical', index=21,
+      name='detected_vertical', full_name='BidRequest.detected_vertical', index=22,
       number=13, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='vertical_dictionary_version', full_name='BidRequest.vertical_dictionary_version', index=22,
+      name='vertical_dictionary_version', full_name='BidRequest.vertical_dictionary_version', index=23,
       number=24, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='detected_content_label', full_name='BidRequest.detected_content_label', index=23,
+      name='detected_content_label', full_name='BidRequest.detected_content_label', index=24,
       number=26, type=5, cpp_type=1, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=descriptor._ParseOptions(descriptor_pb2.FieldOptions(), '\020\001')),
     descriptor.FieldDescriptor(
-      name='site_list_id', full_name='BidRequest.site_list_id', index=24,
+      name='site_list_id', full_name='BidRequest.site_list_id', index=25,
       number=36, type=5, cpp_type=1, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='key_value', full_name='BidRequest.key_value', index=25,
+      name='key_value', full_name='BidRequest.key_value', index=26,
       number=38, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='mobile', full_name='BidRequest.mobile', index=26,
+      name='mobile', full_name='BidRequest.mobile', index=27,
       number=28, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='video', full_name='BidRequest.video', index=27,
+      name='video', full_name='BidRequest.video', index=28,
       number=29, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='publisher_settings_list_id', full_name='BidRequest.publisher_settings_list_id', index=28,
+      name='publisher_settings_list_id', full_name='BidRequest.publisher_settings_list_id', index=29,
       number=42, type=6, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='adslot', full_name='BidRequest.adslot', index=29,
+      name='adslot', full_name='BidRequest.adslot', index=30,
       number=14, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='bid_response_feedback', full_name='BidRequest.bid_response_feedback', index=30,
+      name='bid_response_feedback', full_name='BidRequest.bid_response_feedback', index=31,
       number=44, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='is_test', full_name='BidRequest.is_test', index=31,
+      name='is_test', full_name='BidRequest.is_test', index=32,
       number=15, type=8, cpp_type=7, label=1,
       has_default_value=True, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='is_ping', full_name='BidRequest.is_ping', index=32,
+      name='is_ping', full_name='BidRequest.is_ping', index=33,
       number=17, type=8, cpp_type=7, label=1,
       has_default_value=True, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='is_predicted_to_be_ignored', full_name='BidRequest.is_predicted_to_be_ignored', index=33,
+      name='is_predicted_to_be_ignored', full_name='BidRequest.is_predicted_to_be_ignored', index=34,
       number=45, type=8, cpp_type=7, label=1,
       has_default_value=True, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_protocol_version', full_name='BidRequest.DEPRECATED_protocol_version', index=34,
+      name='DEPRECATED_protocol_version', full_name='BidRequest.DEPRECATED_protocol_version', index=35,
       number=1, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_click_tracking_url', full_name='BidRequest.DEPRECATED_click_tracking_url', index=35,
+      name='DEPRECATED_click_tracking_url', full_name='BidRequest.DEPRECATED_click_tracking_url', index=36,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=unicode("", "utf-8"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_cookie', full_name='BidRequest.DEPRECATED_cookie', index=36,
+      name='DEPRECATED_cookie', full_name='BidRequest.DEPRECATED_cookie', index=37,
       number=5, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_country', full_name='BidRequest.DEPRECATED_country', index=37,
+      name='DEPRECATED_country', full_name='BidRequest.DEPRECATED_country', index=38,
       number=7, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=unicode("", "utf-8"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_region', full_name='BidRequest.DEPRECATED_region', index=38,
+      name='DEPRECATED_region', full_name='BidRequest.DEPRECATED_region', index=39,
       number=8, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=unicode("", "utf-8"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_city', full_name='BidRequest.DEPRECATED_city', index=39,
+      name='DEPRECATED_city', full_name='BidRequest.DEPRECATED_city', index=40,
       number=9, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=unicode("", "utf-8"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_metro', full_name='BidRequest.DEPRECATED_metro', index=40,
+      name='DEPRECATED_metro', full_name='BidRequest.DEPRECATED_metro', index=41,
       number=10, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_hashed_cookie', full_name='BidRequest.DEPRECATED_hashed_cookie', index=41,
+      name='DEPRECATED_hashed_cookie', full_name='BidRequest.DEPRECATED_hashed_cookie', index=42,
       number=16, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_excluded_click_through_url', full_name='BidRequest.DEPRECATED_excluded_click_through_url', index=42,
+      name='DEPRECATED_excluded_click_through_url', full_name='BidRequest.DEPRECATED_excluded_click_through_url', index=43,
       number=18, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_seller_network', full_name='BidRequest.DEPRECATED_seller_network', index=43,
+      name='DEPRECATED_seller_network', full_name='BidRequest.DEPRECATED_seller_network', index=44,
       number=22, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=unicode("", "utf-8"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_publisher_settings_list_id', full_name='BidRequest.DEPRECATED_publisher_settings_list_id', index=44,
+      name='DEPRECATED_publisher_settings_list_id', full_name='BidRequest.DEPRECATED_publisher_settings_list_id', index=45,
       number=23, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_matching_network', full_name='BidRequest.DEPRECATED_matching_network', index=45,
+      name='DEPRECATED_matching_network', full_name='BidRequest.DEPRECATED_matching_network', index=46,
       number=27, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='DEPRECATED_experimental_deadline', full_name='BidRequest.DEPRECATED_experimental_deadline', index=46,
+      name='DEPRECATED_experimental_deadline', full_name='BidRequest.DEPRECATED_experimental_deadline', index=47,
       number=35, type=8, cpp_type=7, label=1,
       has_default_value=True, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
@@ -1466,7 +1623,7 @@ _BIDREQUEST = descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_BIDREQUEST_HYPERLOCAL, _BIDREQUEST_HYPERLOCALSET, _BIDREQUEST_USERLIST, _BIDREQUEST_VERTICAL, _BIDREQUEST_KEYVALUE, _BIDREQUEST_MOBILE, _BIDREQUEST_VIDEO, _BIDREQUEST_ADSLOT, _BIDREQUEST_BIDRESPONSEFEEDBACK, _BIDREQUEST_MATCHINGNETWORK, ],
+  nested_types=[_BIDREQUEST_HYPERLOCAL, _BIDREQUEST_HYPERLOCALSET, _BIDREQUEST_USERDEMOGRAPHIC, _BIDREQUEST_USERLIST, _BIDREQUEST_VERTICAL, _BIDREQUEST_KEYVALUE, _BIDREQUEST_MOBILE, _BIDREQUEST_VIDEO, _BIDREQUEST_ADSLOT, _BIDREQUEST_BIDRESPONSEFEEDBACK, _BIDREQUEST_MATCHINGNETWORK, ],
   enum_types=[
     _BIDREQUEST_USERDATATREATMENT,
   ],
@@ -1474,7 +1631,7 @@ _BIDREQUEST = descriptor.Descriptor(
   is_extendable=False,
   extension_ranges=[],
   serialized_start=27,
-  serialized_end=5283,
+  serialized_end=5799,
 )
 
 
@@ -1557,8 +1714,8 @@ _BIDRESPONSE_AD_TEMPLATEPARAMETER = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=5881,
-  serialized_end=6093,
+  serialized_start=6397,
+  serialized_end=6609,
 )
 
 _BIDRESPONSE_AD_ADSLOT = descriptor.Descriptor(
@@ -1612,8 +1769,8 @@ _BIDRESPONSE_AD_ADSLOT = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=6095,
-  serialized_end=6203,
+  serialized_start=6611,
+  serialized_end=6719,
 )
 
 _BIDRESPONSE_AD = descriptor.Descriptor(
@@ -1751,8 +1908,8 @@ _BIDRESPONSE_AD = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=5418,
-  serialized_end=6203,
+  serialized_start=5934,
+  serialized_end=6719,
 )
 
 _BIDRESPONSE = descriptor.Descriptor(
@@ -1799,8 +1956,8 @@ _BIDRESPONSE = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=5286,
-  serialized_end=6203,
+  serialized_start=5802,
+  serialized_end=6719,
 )
 
 _BIDREQUEST_HYPERLOCAL_POINT.containing_type = _BIDREQUEST_HYPERLOCAL;
@@ -1809,6 +1966,9 @@ _BIDREQUEST_HYPERLOCAL.containing_type = _BIDREQUEST;
 _BIDREQUEST_HYPERLOCALSET.fields_by_name['hyperlocal'].message_type = _BIDREQUEST_HYPERLOCAL
 _BIDREQUEST_HYPERLOCALSET.fields_by_name['center_point'].message_type = _BIDREQUEST_HYPERLOCAL_POINT
 _BIDREQUEST_HYPERLOCALSET.containing_type = _BIDREQUEST;
+_BIDREQUEST_USERDEMOGRAPHIC.fields_by_name['gender'].enum_type = _BIDREQUEST_USERDEMOGRAPHIC_GENDER
+_BIDREQUEST_USERDEMOGRAPHIC.containing_type = _BIDREQUEST;
+_BIDREQUEST_USERDEMOGRAPHIC_GENDER.containing_type = _BIDREQUEST_USERDEMOGRAPHIC;
 _BIDREQUEST_USERLIST.containing_type = _BIDREQUEST;
 _BIDREQUEST_VERTICAL.containing_type = _BIDREQUEST;
 _BIDREQUEST_KEYVALUE.containing_type = _BIDREQUEST;
@@ -1831,7 +1991,9 @@ _BIDREQUEST_VIDEO.containing_type = _BIDREQUEST;
 _BIDREQUEST_VIDEO_INVENTORYTYPE.containing_type = _BIDREQUEST_VIDEO;
 _BIDREQUEST_VIDEO_SKIPPABLEBIDREQUESTTYPE.containing_type = _BIDREQUEST_VIDEO;
 _BIDREQUEST_VIDEO_VIDEOFORMAT.containing_type = _BIDREQUEST_VIDEO;
+_BIDREQUEST_ADSLOT_MATCHINGADDATA_BUYERPRICINGRULE.containing_type = _BIDREQUEST_ADSLOT_MATCHINGADDATA;
 _BIDREQUEST_ADSLOT_MATCHINGADDATA_DIRECTDEAL.containing_type = _BIDREQUEST_ADSLOT_MATCHINGADDATA;
+_BIDREQUEST_ADSLOT_MATCHINGADDATA.fields_by_name['pricing_rule'].message_type = _BIDREQUEST_ADSLOT_MATCHINGADDATA_BUYERPRICINGRULE
 _BIDREQUEST_ADSLOT_MATCHINGADDATA.fields_by_name['direct_deal'].message_type = _BIDREQUEST_ADSLOT_MATCHINGADDATA_DIRECTDEAL
 _BIDREQUEST_ADSLOT_MATCHINGADDATA.containing_type = _BIDREQUEST_ADSLOT;
 _BIDREQUEST_ADSLOT.fields_by_name['matching_ad_data'].message_type = _BIDREQUEST_ADSLOT_MATCHINGADDATA
@@ -1841,6 +2003,7 @@ _BIDREQUEST_ADSLOT_SLOTVISIBILITY.containing_type = _BIDREQUEST_ADSLOT;
 _BIDREQUEST_BIDRESPONSEFEEDBACK.containing_type = _BIDREQUEST;
 _BIDREQUEST_MATCHINGNETWORK.containing_type = _BIDREQUEST;
 _BIDREQUEST.fields_by_name['user_data_treatment'].enum_type = _BIDREQUEST_USERDATATREATMENT
+_BIDREQUEST.fields_by_name['user_demographic'].message_type = _BIDREQUEST_USERDEMOGRAPHIC
 _BIDREQUEST.fields_by_name['user_list'].message_type = _BIDREQUEST_USERLIST
 _BIDREQUEST.fields_by_name['detected_vertical'].message_type = _BIDREQUEST_VERTICAL
 _BIDREQUEST.fields_by_name['key_value'].message_type = _BIDREQUEST_KEYVALUE
@@ -1879,6 +2042,12 @@ class BidRequest(message.Message):
     DESCRIPTOR = _BIDREQUEST_HYPERLOCALSET
     
     # @@protoc_insertion_point(class_scope:BidRequest.HyperlocalSet)
+  
+  class UserDemographic(message.Message):
+    __metaclass__ = reflection.GeneratedProtocolMessageType
+    DESCRIPTOR = _BIDREQUEST_USERDEMOGRAPHIC
+    
+    # @@protoc_insertion_point(class_scope:BidRequest.UserDemographic)
   
   class UserList(message.Message):
     __metaclass__ = reflection.GeneratedProtocolMessageType
@@ -1933,6 +2102,12 @@ class BidRequest(message.Message):
     
     class MatchingAdData(message.Message):
       __metaclass__ = reflection.GeneratedProtocolMessageType
+      
+      class BuyerPricingRule(message.Message):
+        __metaclass__ = reflection.GeneratedProtocolMessageType
+        DESCRIPTOR = _BIDREQUEST_ADSLOT_MATCHINGADDATA_BUYERPRICINGRULE
+        
+        # @@protoc_insertion_point(class_scope:BidRequest.AdSlot.MatchingAdData.BuyerPricingRule)
       
       class DirectDeal(message.Message):
         __metaclass__ = reflection.GeneratedProtocolMessageType

@@ -1,8 +1,3 @@
-'''
-Created on 24/06/2014
-
-@author: pablin
-'''
 import logging
 from string import Template
 
@@ -40,7 +35,9 @@ class AdxPlugin(ParameterPlugin):
         self.iv = config['initialization_vector'].decode("hex")
         
         #self.generator = RandomBidGeneratorWrapper()
-        self.generator = create_mobile_generator()
+        self.generator = create_mobile_generator(config['encryption_key'], 
+                                                 config['integrity_key'],
+                                                 config['initialization_vector'])
         
         self.use_html_snippet = config['use_html_snippet']
         
