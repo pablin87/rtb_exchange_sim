@@ -671,4 +671,4 @@ class MobileBidGenerator(DefaultBidGenerator):
         idfa = random.choice(IDFAS)
         enc_idfa = adx_enc.adx_encrypt(idfa, self.enc_key, self.int_key, 
                                        self.iv)
-        br.encrypted_advertising_id =  enc_idfa
+        br.mobile.encrypted_advertising_id =  enc_idfa
