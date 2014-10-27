@@ -20,6 +20,10 @@ HEX_ENC_KEY = "02EEa83c6c1211e10b9f88966ceec34908eb946f7ed6e441af42b3c0f3218140"
 HEX_INT_KEY = "bfFFec55c30130c1d8cd1862ed2a4cd2c76ac33bc0c4ce8a3d3bbd3ad5687792"
 HEX_IV = "4a3a6f470001e2407b8c4a605b9200f2"
 
+AGE_INTERVALS = [ (1,3), (14,21), (30, 40), (1,60)]
+GENDERS = [ realtime_bidding_pb2.BidRequest.UserDemographic.FEMALE,
+            realtime_bidding_pb2.BidRequest.UserDemographic.MALE ]
+
 HYPERLOCALSETS = [ { 'corners': [(20.0, -30.0), (40.0,10.0)], 
                      'center_point': (50.0, 50.0)},
                   { 'corners': [(10.0, -10.0)], 
@@ -640,8 +644,18 @@ class MobileBidGenerator(DefaultBidGenerator):
 
         self.add_HyperlocalSet(bid_request)
         self.add_idfa(bid_request)
+        
+        self.add_UserDemographic(bid_request)
 
         return bid_request
+
+    def add_UserDemographic(self, br):
+        #ud = realtime_bidding_pb2.BidRequest.UserDemographic()
+        ud = br.user_demographic
+        ud.gender = random.choice(GENDERS)
+        age_low, age_high = random.choice(AGE_INTERVALS)
+        ud.age_low = age_low
+        ud.age_high = age_high
 
     def add_HyperlocalSet(self, br):
         if len(HYPERLOCALSETS) == 0:

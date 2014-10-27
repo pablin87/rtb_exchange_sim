@@ -1,7 +1,11 @@
 Requirements
 ============
 
-- libev (from source, > 4.15) put to make an easy install ./configure --prefix=/usr
+- libev (from source, > 4.15) Download it from source (webpage) and configur it.
+$> ./configure --prefix=/usr
+$> make
+$> sudo make install
+
 - pyev
 - http_parser
 - mako
