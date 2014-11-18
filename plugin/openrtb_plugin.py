@@ -118,20 +118,6 @@ class OpenRTBPlugin(ParameterPlugin):
         click_url = click_beacon.substitute(br_data)
         self.__send_click_notification(click_url)
     
-    def extract_imp_beacons_from_adm(self, adm):
-        '''
-        Try to get the impression and click beacon from a adm openRTB field.
-        The click beacon is extracted from an anchor (<a>) tag from the 
-        '''
-        pass
-
-    def extract_click_beacons_from_adm(self, adm):
-        '''
-        Try to get the impression and click beacon from a adm openRTB field.
-        The click beacon is extracted from an anchor (<a>) tag from the 
-        '''
-        pass
-    
     def get_auction_price(self, json_response):
         if self.use_heh_endpoint:
             return json_response['seatbid'][0]['bid'][0]['price']
