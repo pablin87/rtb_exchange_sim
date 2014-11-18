@@ -5,6 +5,8 @@ import json
 import logging
 from urlparse import urlparse
 
+from tag_parsing import extract_click_beacons_from_adm
+from tag_parsing import extract_imp_beacons_from_adm
 
 class OpenRTBPlugin(ParameterPlugin):
     '''
@@ -44,6 +46,9 @@ class OpenRTBPlugin(ParameterPlugin):
         # Create the templates for the notifications
         self.tmpl_imp_notif = Template(self.tmpl_imp_notif_file)
         self.tmpl_click_notif = Template(self.tmpl_click_notif_file)
+        
+        # Check if we are going to use the adm field directly
+        self.use_adm = config['use_adm']
 
     def get_request(self):
         # We need to return a request line, a map of headers and a body
@@ -82,23 +87,37 @@ class OpenRTBPlugin(ParameterPlugin):
         price = self.get_auction_price(js)
         auction_id = self.get_auction_id(js)
         spot_id = self.get_auction_impression_id(js)
+        adm = self.get_adm(js)
         
         # With that data, create the notification...
-        notif_render = { 'AUCTION_PRICE' : price,
-                         'AUCTION_ID' : auction_id,
-                         'AUCTION_IMP_ID' : spot_id,
-                         'exchange' : self.exchange }
+        notif_data = { 'AUCTION_PRICE' : price,
+                       'AUCTION_ID' : auction_id,
+                       'AUCTION_IMP_ID' : spot_id,
+                       'exchange' : self.exchange,
+                       'adm' : adm }
         
-        # Win notification...
-        url = self.tmpl_imp_notif.substitute(notif_render)
+        self.do_beaconning(notif_data)
+                
+        return (False, '', {}, '')
+    
+    def do_beaconning(self, br_data):
+        if self.use_adm :
+            imp_beacon = extract_imp_beacons_from_adm(br_data['adm'])
+            imp_beacon = Template(imp_beacon)
+            click_beacon = extract_click_beacons_from_adm(br_data['adm'])
+            click_beacon = Template(click_beacon)
+        else :
+            imp_beacon = self.tmpl_imp_notif
+            click_beacon = self.tmpl_click_notif
+        
+        # Render and call the win notification...
+        url = imp_beacon.substitute(br_data)
         self.__send_impression_notification(url)
         
-        # Click notification... 
-        click_url = self.tmpl_click_notif.substitute(notif_render)
+        # Render and call the click notification... 
+        click_url = click_beacon.substitute(br_data)
         self.__send_click_notification(click_url)
-        
-        return (False, '', {}, '')
-        
+    
     def get_auction_price(self, json_response):
         if self.use_heh_endpoint:
             return json_response['seatbid'][0]['bid'][0]['price']
@@ -115,6 +134,9 @@ class OpenRTBPlugin(ParameterPlugin):
 
     def get_auction_impression_id(self, json_response):
         return json_response['seatbid'][0]['bid'][0]['impid']
+    
+    def get_adm(self, json_response):
+        return json_response['seatbid'][0]['bid'][0]['adm']
 
     def __send_click_notification(self, url):
         

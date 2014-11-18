@@ -1,4 +1,5 @@
 import re
+from BeautifulSoup import BeautifulSoup
 
 CLICK_REGEX = re.compile('(.*[\'\"])(?P<http>http://).*(?P<url>/click/.*\?.*)([\'\"].*)')
 IMP_REGEX = re.compile('(.*[\'\"])(?P<http>http://).*(?P<url>/impression/.*\?.*)([\'\"].*)')
@@ -44,3 +45,18 @@ def extract_auction_id(html_tag):
     # and not by the exchange with the macro replacement. So, for Adx.
     imp_url = get_impression_url_source(html_tag)
     return imp_url.split('/')[3]
+
+def extract_imp_beacons_from_adm(adm):
+    '''
+    Try to get the impression and click beacon from a adm openRTB field.
+    The click beacon is extracted from an anchor (<a>) tag from the 
+    '''
+    b = BeautifulSoup(adm)
+    imgtags = [ i for i in b if i.name == 'img']
+    return imgtags[0]['src']
+
+def extract_click_beacons_from_adm(adm):
+    b = BeautifulSoup(adm)
+    atag = b.find('a', attrs={'href':True})
+    return atag['href']
+

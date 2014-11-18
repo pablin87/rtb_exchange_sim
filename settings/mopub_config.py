@@ -25,6 +25,12 @@ conf = {
         # in order to place a bid request. 
         'http_resource' : 'mopub',
 
+        # If this is set to true, then the impresion and click are get from the 
+        # openrtb html ad tag ('adm' field). 
+        # impression url : it is get from a <img> tag of the adm.
+        # click url : it is get from the 'href' attribute from the <a> tag.
+        'use_adm' : True,
+
         # Define the url where the notifications of impressions and clicks will
         # be send. By this, the adm field is not have in count. The ip and
         # port set it here are replaced by global parameters of the endpoint 
