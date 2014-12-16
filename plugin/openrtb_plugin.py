@@ -91,6 +91,7 @@ class OpenRTBPlugin(ParameterPlugin):
         
         # With that data, create the notification...
         notif_data = { 'AUCTION_PRICE' : price,
+                       'AUCTION_PRICE:BF' : price, # for bluefish encryption
                        'AUCTION_ID' : auction_id,
                        'AUCTION_IMP_ID' : spot_id,
                        'exchange' : self.exchange,

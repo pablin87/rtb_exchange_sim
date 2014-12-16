@@ -15,13 +15,13 @@ MAX_EVENT_CONNS = 4
 #  - endpoint should be a string 'host:port'
 #  - expected_qps is the amount of qps expected for the endpoint
 ENDPOINT_LIST = [
-    ('localhost:12343', 20),
+    ('10.0.2.10:12337', 20),
 ]
 
 # Event endpoint :
 # - endpoint should be a string 'host:port'
 #EVENT_ENDPOINT = 'localhost:12340'
-EVENT_ENDPOINT = 'localhost:8989'
+EVENT_ENDPOINT = '10.0.2.11:12340'
 
 # Balance time out indicating the period in seconds 
 # to balance connections
@@ -56,20 +56,22 @@ KEEP_ALIVE_HTTP_REQUEST = \
 # - logging.INFO
 # - logging.WARNING
 # - logging.ERROR
-LOG_LEVEL = logging.DEBUG
+LOG_LEVEL = logging.INFO
 
 # Parameter plugin
 #PARAMETER_PLUGIN = RubiconPlugin
-#PARAMETER_PLUGIN = OpenRTBPlugin
-PARAMETER_PLUGIN = AdxPlugin
+PARAMETER_PLUGIN = OpenRTBPlugin
+#PARAMETER_PLUGIN = AdxPlugin
 
 # Configuration map that will be passed in the initialize 
 import mopub_config
 import nexage_config
+import rubicon_config
 import adx_config
 #PLUGIN_CONFIG = mopub_config.conf
-#PLUGIN_CONFIG = nexage_config.conf
-PLUGIN_CONFIG = adx_config.conf
+PLUGIN_CONFIG = nexage_config.conf
+#PLUGIN_CONFIG = rubicon_config.conf
+#PLUGIN_CONFIG = adx_config.conf
 
 # RTB request template filename
 TEMPLATE_FILENAME = 'templates/request.template'

@@ -2,9 +2,9 @@ import logging
 from string import Template
 
 from parameter_plugin import ParameterPlugin
-import tag_parsing
+import tag_parsing as tg
 
-from adx.generator import RandomBidGeneratorWrapper, create_mobile_generator
+from adx.generator import create_mobile_generator
 from adx import realtime_bidding_pb2 as adxproto
 from adx.encryption.adx_encryption_utils import adx_encrypt_price
 
@@ -98,7 +98,7 @@ class AdxPlugin(ParameterPlugin):
 
     def get_auction_id(self, br):
         # For now only support html_snippet.
-        return tag_parsing.extract_auction_id(br.ad[0].html_snippet)
+        return tg.extract_auction_id(br.ad[0].html_snippet)
 
     def get_spot_id(self, br):
         # For now only support html_snippet.
@@ -134,9 +134,10 @@ class AdxPlugin(ParameterPlugin):
                 bid_price = str(bid_price)
             
             # With that data, create the notification...
-            notif_render = { 'AUCTION_PRICE' : bid_price,
-                            'AUCTION_ID' : auction_id,
-                            'AUCTION_IMP_ID' : spot_id }
+            notif_render = { 'AUCTION_ID' : auction_id,
+                             'AUCTION_IMP_ID' : spot_id,
+                             'WINNING_PRICE': bid_price,
+                             'CLICK_URL_ESC': "http://adx.click.url.esc" }
             self.do_events(notif_render, bid_resp)
             
         except :
@@ -154,20 +155,24 @@ class AdxPlugin(ParameterPlugin):
     def do_event_from_html_snippet(self, bid_resp, notif_render_map):
         # Get the corresponding urls and set the price to the imp url
 
+        # Extract beacons from tag
         tag = bid_resp.ad[0].html_snippet
-
-        price = notif_render_map['AUCTION_PRICE']
-        imp_url = tag_parsing.get_impression_url_source(tag)
-        imp_url = self.replace_price_macro(imp_url, price)
+        imp_url = tg.extract_imp_beacons_from_adm(tag)
+        clicl_url = tg.extract_click_beacons_from_adm(tag)
+        
+        # Do macro replacement
+        imp_url = self.replace_adx_macros(imp_url, notif_render_map)
         self.__send_impression_notification(imp_url)
         
-        # now for the click url
-        clicl_url = tag_parsing.get_click_url_source(tag)
+        # Now do beaconing
+        clicl_url = self.replace_adx_macros(clicl_url, notif_render_map)
         self.__send_click_notification(clicl_url)
     
-    def replace_price_macro(self, imp_url, price):
-        PRICE_MACRO = "%%WINNING_PRICE%%"
-        return imp_url.replace(PRICE_MACRO, str(price))
+    def replace_adx_macros(self, stream, macros):
+        for macro, value in macros.iteritems():
+            macro = "%%%%%s%%%%" % macro
+            stream = stream.replace(macro, str(value))
+        return stream
     
     def do_event_from_templates(self, notif_render_map):
         # Win notification...

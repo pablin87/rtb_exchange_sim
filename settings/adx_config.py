@@ -15,20 +15,20 @@ conf = {
         # and the EVENT_ENDPOINT from the general settings.
         # It will use directly the impression url that came in the html_snipet 
         # from the adx bid response. 
-        'use_html_snippet' : False,
+        'use_html_snippet' : True,
 
         # Define the url where the notifications of impressions and clicks will
         # be send. By this, the adm field is not have in count. The ip and
         # port set it here are replaced by global parameters of the endpoint 
         # settings. 
-        'adserver_endpt_imp_tmpl' : "http://localhost:8080/events?ev=imp&aid=${AUCTION_ID}&apr=${AUCTION_PRICE}&sptid=${AUCTION_IMP_ID}",
-        'adserver_endpt_click_tmpl' : "http://localhost:8080/events?ev=cli&aid=${AUCTION_ID}&sptid=${AUCTION_IMP_ID}",
+        'adserver_endpt_imp_tmpl' : "http://localhost:8080/events?ev=imp&aid=%%AUCTION_ID%%&apr=%%AUCTION_PRICE%%&sptid=%%AUCTION_IMP_ID%%",
+        'adserver_endpt_click_tmpl' : "http://localhost:8080/events?ev=cli&aid=%%AUCTION_ID%%&sptid=%%AUCTION_IMP_ID%%",
         
         # If set to true, instead of using the 'adserver_endpt_imp_tmpl' and 
         # 'adserver_endpt_click_tmpl', it will use the following heh templates
         # in order to hit heh instead of the ad server connector directly.
-        'use_heh_endpoint' : True, 
-        'heh_endpt_imp_tmpl' : "http://localhost:8080/impression/adx/${AUCTION_ID}/${AUCTION_PRICE}?impid=${AUCTION_IMP_ID}",
-        'heh_endpt_click_tmpl' : "http://localhost:8080/click/adx/${AUCTION_ID}?impid=${AUCTION_IMP_ID}"
+        'use_heh_endpoint' : False, 
+        'heh_endpt_imp_tmpl' : "http://localhost:8080/impression/adx/%%AUCTION_ID%%/%%AUCTION_PRICE%%?impid=%%AUCTION_IMP_ID%%",
+        'heh_endpt_click_tmpl' : "http://localhost:8080/click/adx/%%AUCTION_ID%%?impid=%%AUCTION_IMP_ID%%"
         
         }
