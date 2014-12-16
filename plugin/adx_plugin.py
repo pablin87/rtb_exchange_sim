@@ -162,10 +162,10 @@ class AdxPlugin(ParameterPlugin):
         
         # Do macro replacement
         imp_url = self.replace_adx_macros(imp_url, notif_render_map)
-        self.__send_impression_notification(imp_url)
+        clicl_url = self.replace_adx_macros(clicl_url, notif_render_map)
         
         # Now do beaconing
-        clicl_url = self.replace_adx_macros(clicl_url, notif_render_map)
+        self.__send_impression_notification(imp_url)
         self.__send_click_notification(clicl_url)
     
     def replace_adx_macros(self, stream, macros):
