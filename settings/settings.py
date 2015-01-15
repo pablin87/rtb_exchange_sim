@@ -5,6 +5,7 @@ from plugin.rubicon_plugin import RubiconPlugin
 from plugin.datacratic_plugin import DatacraticPlugin
 from plugin.openrtb_plugin import OpenRTBPlugin
 from plugin.adx_plugin import AdxPlugin
+from plugin.mopub_plugin import MopubPlugin
 
 # Max connections for bid requests allowed for the process
 MAX_CONNS = 50
@@ -60,8 +61,9 @@ LOG_LEVEL = logging.INFO
 
 # Parameter plugin
 #PARAMETER_PLUGIN = RubiconPlugin
-PARAMETER_PLUGIN = OpenRTBPlugin # used for mopub and nexage
+#PARAMETER_PLUGIN = OpenRTBPlugin # used for nexage
 #PARAMETER_PLUGIN = AdxPlugin
+PARAMETER_PLUGIN = MopubPlugin
 
 # Configuration map that will be passed in the initialize 
 import mopub_config
