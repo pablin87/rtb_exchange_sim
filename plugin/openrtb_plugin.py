@@ -105,27 +105,39 @@ class OpenRTBPlugin(ParameterPlugin):
     
     def do_beaconning(self, br_data):
         if self.use_adm :
-            imp_beacon = self.extract_adm_impression_beacon(br_data['adm'])
-            imp_beacon = MacroTemplate(imp_beacon)
-            click_beacon = self.extract_adm_click_beacon(br_data['adm'])
-            click_beacon = MacroTemplate(click_beacon)
+            imp_beacons = self.extract_adm_impression_beacons(br_data['adm'])
+            imp_beacons = [ MacroTemplate(bcn) for bcn in imp_beacons ]
+            click_beacons = self.extract_adm_click_beacons(br_data['adm'])
+            click_beacons = [ MacroTemplate(bcn) for bcn in click_beacons ]
         else :
-            imp_beacon = self.tmpl_imp_notif
-            click_beacon = self.tmpl_click_notif
+            imp_beacons = [ self.tmpl_imp_notif ]
+            click_beacons = [ self.tmpl_click_notif ]
         
-        # Render and call the win notification...
-        url = imp_beacon.substitute(br_data)
-        self.__send_impression_notification(url)
+        # Render and call the win notifications...
+        for imp_bcn in imp_beacons:
+            url = imp_bcn.substitute(br_data)
+            self.__send_impression_notification(url)
         
-        # Render and call the click notification... 
-        click_url = click_beacon.substitute(br_data)
-        self.__send_click_notification(click_url)
+        # Render and call the click notifications... 
+        for click_bcn in click_beacons:
+            click_url = click_bcn.substitute(br_data)
+            self.__send_click_notification(click_url)
     
-    def extract_adm_impression_beacon(self, adm):
-        return extract_imp_beacons_from_adm(adm)
+    def extract_adm_impression_beacons(self, adm):
+        '''
+        Return a list of url beacons to be called to generate impressions.
+        The urls may have macros that need to be replaced
+        '''
+        bcns = [ extract_imp_beacons_from_adm(adm) ]
+        return bcns
     
-    def extract_adm_click_beacon(self, adm):
-        return extract_click_beacons_from_adm(adm)
+    def extract_adm_click_beacons(self, adm):
+        '''
+        Return a list of url beacons to be called to generate clicks.
+        The urls may have macros that need to be replaced
+        '''
+        bcns = [ extract_click_beacons_from_adm(adm) ]
+        return bcns
     
     def get_auction_price(self, json_response):
         if self.use_heh_endpoint:

@@ -12,21 +12,31 @@ class SmaatoPlugin(OpenRTBPlugin):
         super(SmaatoPlugin, self).initialize(adserver, config)
         self.def_headers['x-openrtb-version'] = '2.0'
 
-    def extract_adm_impression_beacon(self, adm):
-        return self.__extract_url_from_node(adm, 'imgUrl')
+    def extract_adm_impression_beacons(self, adm):
+        bcns = []
+        try :
+            root = ElementTree.fromstring(adm)
+            for bcn in root.find('imageAd').find("beacons"):
+                bcns.append(bcn.text)
+        except :
+            logging.exception("While parsing beacons from xml : %s", adm)
+        return bcns
     
-    def extract_adm_click_beacon(self, adm):
+    def extract_adm_click_beacons(self, adm):
         return self.__extract_url_from_node(adm, 'clickUrl')
     
     def get_auction_price(self, json_response):
         # Smaato follows OpernRTB which sends price in USD CPM. And the price is sent in USD CPM.
         return json_response['seatbid'][0]['bid'][0]['price']
 
+    def extract_image_url(self, adm):
+        return self.__extract_url_from_node(adm, 'imgUrl')
+
     def __extract_url_from_node(self, adm, node_name):
         root = ElementTree.fromstring(adm)
-        url = ''
+        url = []
         try:
-            url = root.find('imageAd').find(node_name).text
+            url.append(root.find('imageAd').find(node_name).text)
         except :
             logging.exception("While parsing %s beacon from xml : %s", 
                               node_name, adm)
