@@ -1,5 +1,10 @@
 import re
 from BeautifulSoup import BeautifulSoup
+from string import Template
+
+# We do this to support ':' inside a macro
+class MacroTemplate(Template):
+    idpattern = r'[a-z][_a-z0-9]*(:[a-z][_a-z0-9]*)*'
 
 CLICK_REGEX = re.compile('(.*[\'\"])(?P<http>http://).*(?P<url>/click/.*\?.*)([\'\"].*)')
 IMP_REGEX = re.compile('(.*[\'\"])(?P<http>http://).*(?P<url>/impression/.*\?.*)([\'\"].*)')

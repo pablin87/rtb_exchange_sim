@@ -1,16 +1,12 @@
 from parameter_plugin import ParameterPlugin
-from string import Template
 import random
 import json
 import logging
 from urlparse import urlparse
-
 from tag_parsing import extract_click_beacons_from_adm
 from tag_parsing import extract_imp_beacons_from_adm
+from tag_parsing import MacroTemplate
 
-# We do this to support ':' inside a macro
-class MyTemplate(Template):
-    idpattern = r'[a-z][_a-z0-9]*(:[a-z][_a-z0-9]*)*'
 
 class OpenRTBPlugin(ParameterPlugin):
     '''
@@ -35,7 +31,7 @@ class OpenRTBPlugin(ParameterPlugin):
         for filename in self.request_body_templates_files:
             with open(filename) as f:
                 logging.info('Using file template %s' % filename)
-                tmpl = MyTemplate(''.join(f.readlines()))
+                tmpl = MacroTemplate(''.join(f.readlines()))
                 self.request_body_templates.append(tmpl)
         
         # Templates for notification endpoint
@@ -48,8 +44,8 @@ class OpenRTBPlugin(ParameterPlugin):
             self.tmpl_click_notif_file = config['adserver_endpt_click_tmpl']
         
         # Create the templates for the notifications
-        self.tmpl_imp_notif = MyTemplate(self.tmpl_imp_notif_file)
-        self.tmpl_click_notif = MyTemplate(self.tmpl_click_notif_file)
+        self.tmpl_imp_notif = MacroTemplate(self.tmpl_imp_notif_file)
+        self.tmpl_click_notif = MacroTemplate(self.tmpl_click_notif_file)
         
         # Check if we are going to use the adm field directly
         self.use_adm = config['use_adm']
@@ -108,9 +104,9 @@ class OpenRTBPlugin(ParameterPlugin):
     def do_beaconning(self, br_data):
         if self.use_adm :
             imp_beacon = extract_imp_beacons_from_adm(br_data['adm'])
-            imp_beacon = MyTemplate(imp_beacon)
+            imp_beacon = MacroTemplate(imp_beacon)
             click_beacon = extract_click_beacons_from_adm(br_data['adm'])
-            click_beacon = MyTemplate(click_beacon)
+            click_beacon = MacroTemplate(click_beacon)
         else :
             imp_beacon = self.tmpl_imp_notif
             click_beacon = self.tmpl_click_notif
