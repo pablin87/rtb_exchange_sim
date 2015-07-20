@@ -4,6 +4,7 @@ Created on Mar 17, 2014
 @author: pablob
 '''
 import random
+import string
 
 def incrementor(seed):
     # Return a function that when it is call the first time returns the seed 
@@ -22,5 +23,18 @@ def random_id():
     def _random():
         while True:
             yield random.randint(1000000, 999999999)
+    ran = _random()
+    return lambda : ran.next()
+
+def __random_letters(m):
+    buf = []
+    for i in range(m):
+        buf.append(random.choice(string.letters))
+    return ''.join(buf)
+
+def random_letters(amount):
+    def _random():
+        while True:
+            yield __random_letters(amount)
     ran = _random()
     return lambda : ran.next()

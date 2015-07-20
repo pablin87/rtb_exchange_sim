@@ -1,0 +1,33 @@
+from openrtb_plugin import OpenRTBPlugin
+from xml.etree import ElementTree 
+import logging
+
+class SmaatoPlugin(OpenRTBPlugin):
+    '''
+        Change the way we extract the impression and click beacon from the 
+        bid response, as smaato uses a private xml scheme for ad tags.
+    '''
+    
+    def initialize(self, adserver, config):
+        super(SmaatoPlugin, self).initialize(adserver, config)
+        self.def_headers['x-openrtb-version'] = '2.0'
+
+    def extract_adm_impression_beacon(self, adm):
+        return self.__extract_url_from_node(adm, 'imgUrl')
+    
+    def extract_adm_click_beacon(self, adm):
+        return self.__extract_url_from_node(adm, 'clickUrl')
+    
+    def get_auction_price(self, json_response):
+        # Smaato follows OpernRTB which sends price in USD CPM. And the price is sent in USD CPM.
+        return json_response['seatbid'][0]['bid'][0]['price']
+
+    def __extract_url_from_node(self, adm, node_name):
+        root = ElementTree.fromstring(adm)
+        url = ''
+        try:
+            url = root.find('imageAd').find(node_name).text
+        except :
+            logging.exception("While parsing %s beacon from xml : %s", 
+                              node_name, adm)
+        return url

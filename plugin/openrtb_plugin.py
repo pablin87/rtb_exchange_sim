@@ -49,6 +49,12 @@ class OpenRTBPlugin(ParameterPlugin):
         
         # Check if we are going to use the adm field directly
         self.use_adm = config['use_adm']
+        
+        self.def_headers = {}
+        self.def_headers['Host'] = 'localhost'
+        self.def_headers['Connection'] = 'keep-alive'
+        self.def_headers['Content-Type'] = 'application/json'
+        self.def_headers['x-openrtb-version'] = '2.1'
 
     def get_request(self):
         # We need to return a request line, a map of headers and a body
@@ -57,11 +63,7 @@ class OpenRTBPlugin(ParameterPlugin):
         req_line = 'POST /%s HTTP/1.1' % self.http_resource
         
         # Set the headers
-        headers = {}
-        headers['Host'] = 'localhost'
-        headers['Connection'] = 'keep-alive'
-        headers['Content-Type'] = 'application/json'
-        headers['x-openrtb-version'] = '2.1'
+        headers = self.def_headers.copy()
         
         # Render the body...
         tmpl = random.choice(self.request_body_templates)
@@ -103,9 +105,9 @@ class OpenRTBPlugin(ParameterPlugin):
     
     def do_beaconning(self, br_data):
         if self.use_adm :
-            imp_beacon = extract_imp_beacons_from_adm(br_data['adm'])
+            imp_beacon = self.extract_adm_impression_beacon(br_data['adm'])
             imp_beacon = MacroTemplate(imp_beacon)
-            click_beacon = extract_click_beacons_from_adm(br_data['adm'])
+            click_beacon = self.extract_adm_click_beacon(br_data['adm'])
             click_beacon = MacroTemplate(click_beacon)
         else :
             imp_beacon = self.tmpl_imp_notif
@@ -118,6 +120,12 @@ class OpenRTBPlugin(ParameterPlugin):
         # Render and call the click notification... 
         click_url = click_beacon.substitute(br_data)
         self.__send_click_notification(click_url)
+    
+    def extract_adm_impression_beacon(self, adm):
+        return extract_imp_beacons_from_adm(adm)
+    
+    def extract_adm_click_beacon(self, adm):
+        return extract_click_beacons_from_adm(adm)
     
     def get_auction_price(self, json_response):
         if self.use_heh_endpoint:
