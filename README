@@ -5,6 +5,7 @@ Requirements
 $> ./configure --prefix=/usr
 $> make
 $> sudo make install
+- python-dev package (ubuntu)
 
 - pyev
 - http_parser
