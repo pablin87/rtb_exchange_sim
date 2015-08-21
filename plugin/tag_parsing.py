@@ -1,6 +1,7 @@
 import re
 from BeautifulSoup import BeautifulSoup
 from string import Template
+import json
 
 # We do this to support ':' inside a macro
 class MacroTemplate(Template):
@@ -52,16 +53,72 @@ def extract_auction_id(html_tag):
     return imp_url.split('/')[3]
 
 def extract_imp_beacons_from_adm(adm):
+    if is_native(adm):
+        jsnative = json.loads(adm)
+        return extract_imp_beacons_from_native(jsnative)
+    else:
+        return extract_imp_beacons_from_html(adm)
+
+def extract_click_beacons_from_adm(adm):
+    if is_native(adm):
+        jsnative = json.loads(adm)
+        return extract_click_beacons_from_native(jsnative)
+    else:
+        return extract_click_beacons_from_html(adm)
+
+def extract_imp_beacons_from_html(adm):
     '''
-    Try to get the impression and click beacon from a adm openRTB field.
-    The click beacon is extracted from an anchor (<a>) tag from the 
+    Try to get the impression from a html adm openRTB field. The impression 
+    beacon is extracted from the img tag from the src field. 
     '''
     b = BeautifulSoup(adm)
     imgtags = [ i for i in b if i.name == 'img']
-    return imgtags[0]['src']
+    return [ imgtags[0]['src'] ]
 
-def extract_click_beacons_from_adm(adm):
+def extract_click_beacons_from_html(adm):
+    '''
+    Try to get the click track url from a html adm openRTB field. The click 
+    beacon is extracted from an anchor (<a>) tag from the href field.
+    '''
     b = BeautifulSoup(adm)
     atag = b.find('a', attrs={'href':True})
-    return atag['href']
+    return [ atag['href'] ]
 
+def extract_imp_beacons_from_native(native_resp):
+    '''
+    Extract impression beacons from a native response json.
+    Beacons are extracted from native->imptrackers.
+    '''
+    
+    bcns = []
+    if 'imptrackers' in native_resp['native']:
+        bcns.extend(native_resp['native']['imptrackers'])
+    return bcns
+
+def extract_click_beacons_from_native(native_resp):
+    '''
+    Extract click beacons from a native response json. Beacons are extracted 
+    from native->link->clicktrackers (parent link object) and from the 
+    clicktrackers of the links objects in the assets.
+    '''
+    bcns = []
+    if 'clicktrackers' in native_resp['native']['link']:
+        bcns.extend(native_resp['native']['link']['clicktrackers'])
+        
+    for asset in native_resp['native']['assets']:
+        if 'link' in asset:
+            if 'clicktrackers' in asset['link']:
+                bcns.extend(asset['link']['clicktrackers'])
+                
+    return bcns
+
+def is_native(adm):
+    '''
+    Indicates if the given adm field from an OpenRTB response corresponds
+    to a native ad or not.
+    '''
+    try:
+        native = json.loads(adm)
+        return native.has_key('native')
+    except :
+        return False

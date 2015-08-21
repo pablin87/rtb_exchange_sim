@@ -1,0 +1,39 @@
+{
+    "native": {
+        "ver": 1,
+        "link": {
+            "url": "deeplink://deeplink/url/into/app",
+            "fallback": "http: //i.am.a/URL",
+            "clicktrackers": [
+                "http: //a.com/a",
+                "http: //b.com/b"
+            ]
+        },
+        "imptrackers": [
+            "http: //a.com/a",
+            "http: //b.com/b"
+        ],
+        "assets": [
+            {
+                "id": 1,
+                "title": {
+                    "text": "Install BOA"
+                }
+            },
+            {
+                "id": 2,
+                "data": {
+                    "value": "Manage Finances on your phone"
+                }
+            },
+            {
+                "id": 3,
+                "img": {
+                    "url": "http://cdn.mobad.com/ad.png",
+                    "w": 64,
+                    "h": 64
+                }
+            }
+        ]
+    }
+}

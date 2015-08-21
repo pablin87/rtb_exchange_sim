@@ -3,9 +3,7 @@ import random
 import json
 import logging
 from urlparse import urlparse
-from tag_parsing import extract_click_beacons_from_adm
-from tag_parsing import extract_imp_beacons_from_adm
-from tag_parsing import MacroTemplate
+import tag_parsing as tgp
 
 
 class OpenRTBPlugin(ParameterPlugin):
@@ -31,7 +29,7 @@ class OpenRTBPlugin(ParameterPlugin):
         for filename in self.request_body_templates_files:
             with open(filename) as f:
                 logging.info('Using file template %s' % filename)
-                tmpl = MacroTemplate(''.join(f.readlines()))
+                tmpl = tgp.MacroTemplate(''.join(f.readlines()))
                 self.request_body_templates.append(tmpl)
         
         # Templates for notification endpoint
@@ -44,8 +42,8 @@ class OpenRTBPlugin(ParameterPlugin):
             self.tmpl_click_notif_file = config['adserver_endpt_click_tmpl']
         
         # Create the templates for the notifications
-        self.tmpl_imp_notif = MacroTemplate(self.tmpl_imp_notif_file)
-        self.tmpl_click_notif = MacroTemplate(self.tmpl_click_notif_file)
+        self.tmpl_imp_notif = tgp.MacroTemplate(self.tmpl_imp_notif_file)
+        self.tmpl_click_notif = tgp.MacroTemplate(self.tmpl_click_notif_file)
         
         # Check if we are going to use the adm field directly
         self.use_adm = config['use_adm']
@@ -106,9 +104,9 @@ class OpenRTBPlugin(ParameterPlugin):
     def do_beaconning(self, br_data):
         if self.use_adm :
             imp_beacons = self.extract_adm_impression_beacons(br_data['adm'])
-            imp_beacons = [ MacroTemplate(bcn) for bcn in imp_beacons ]
+            imp_beacons = [ tgp.MacroTemplate(bcn) for bcn in imp_beacons ]
             click_beacons = self.extract_adm_click_beacons(br_data['adm'])
-            click_beacons = [ MacroTemplate(bcn) for bcn in click_beacons ]
+            click_beacons = [ tgp.MacroTemplate(bcn) for bcn in click_beacons ]
         else :
             imp_beacons = [ self.tmpl_imp_notif ]
             click_beacons = [ self.tmpl_click_notif ]
@@ -128,7 +126,7 @@ class OpenRTBPlugin(ParameterPlugin):
         Return a list of url beacons to be called to generate impressions.
         The urls may have macros that need to be replaced
         '''
-        bcns = [ extract_imp_beacons_from_adm(adm) ]
+        bcns = tgp.extract_imp_beacons_from_adm(adm)
         return bcns
     
     def extract_adm_click_beacons(self, adm):
@@ -136,7 +134,7 @@ class OpenRTBPlugin(ParameterPlugin):
         Return a list of url beacons to be called to generate clicks.
         The urls may have macros that need to be replaced
         '''
-        bcns = [ extract_click_beacons_from_adm(adm) ]
+        bcns = tgp.extract_click_beacons_from_adm(adm)
         return bcns
     
     def get_auction_price(self, json_response):

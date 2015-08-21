@@ -1,0 +1,50 @@
+{
+    "native": {
+        "ver": 1,
+        "link": {
+            "url": "deeplink://deeplink/url/into/app",
+            "fallback": "http: //i.am.a/URL",
+            "clicktrackers": [
+                "http: //click.com/a",
+                "http: //click.com/b"
+            ]
+        },
+        "assets": [
+            {
+                "id": 1,
+                "title": {
+                    "text": "Plasma Television"
+                },
+                "link": {
+                    "clicktrackers": [
+                        "http: //title.a.com/a",
+                        "http: //title.b.com/b"
+                    ]
+                }
+            },
+            {
+                "id": 2,
+                "data": {
+                    "value": "Huge range of equipment on sale"
+                }
+            },
+            {
+                "id": 3,
+                "data": {
+                    "value": "Free delivery. Order now."
+                },
+                "link": {
+                    "clicktrackers": [
+                        "http: //data3.a.com/a"
+                    ]
+                }
+            },
+            {
+                "id": 4,
+                "data": {
+                    "value": "mybestplasmatvstore.com"
+                }
+            }
+        ]
+    }
+}
