@@ -86,22 +86,31 @@ class OpenRTBPlugin(ParameterPlugin):
         js = json.loads(body)
         logging.debug("Response received :")
         logging.debug(str(js))
-        price = self.get_auction_price(js)
-        auction_id = self.get_auction_id(js)
-        spot_id = self.get_auction_impression_id(js)
         adm = self.get_adm(js)
         
         # With that data, create the notification...
-        notif_data = { 'AUCTION_PRICE' : price,
-                       'AUCTION_PRICE:BF' : price, # for bluefish encryption
-                       'AUCTION_ID' : auction_id,
-                       'AUCTION_IMP_ID' : spot_id,
-                       'exchange' : self.exchange,
+        notif_data = { 'exchange' : self.exchange,
                        'adm' : adm }
+        notif_data.update(self.get_beacon_macros(js))
         
         self.do_beaconning(notif_data)
-                
+        
         return (False, '', {}, '')
+    
+    def get_beacon_macros(self, jsbr):
+        '''
+        Return a dictionary of macros to be replaced in the beacons (i.e. adm).
+        '''
+        price = self.get_auction_price(jsbr)
+        auction_id = self.get_auction_id(jsbr)
+        spot_id = self.get_auction_impression_id(jsbr)
+        
+        bcns_macro = { 'AUCTION_PRICE' : price,
+                      'AUCTION_PRICE:BF' : price, # for bluefish encryption
+                      'AUCTION_ID' : auction_id,
+                      'AUCTION_IMP_ID' : spot_id
+                      }
+        return bcns_macro
     
     def do_beaconning(self, br_data):
         if self.use_adm :
