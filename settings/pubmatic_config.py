@@ -13,7 +13,8 @@ conf = {
         # This define the body templates that are being sent to the rtbkit
         # exchange connector endpoint (files).
         'req_body_templates' : [ 
-                                'plugin/pubmatic/pubmatic_app_1.tmpl', 
+                                'plugin/pubmatic/pubmatic_app_1.tmpl',
+                                'plugin/pubmatic/pubmatic_app_1.tmpl',
                                 'plugin/pubmatic/pubmatic_site_1.tmpl'
                                 ],
         
