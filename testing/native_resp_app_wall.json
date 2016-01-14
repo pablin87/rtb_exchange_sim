@@ -1,0 +1,51 @@
+{
+    "native": {
+        "ver": 1,
+        "link": {
+            "url": "deeplink://deeplink/url/into/app",
+            "fallback": "http: //fallback.am.a/URL",
+            "clicktrackers": [
+                "http: //click.com/a",
+                "http: //click.com/b"
+            ]
+        },
+        "imptrackers": [
+            "http: //imp.com/a",
+            "http: //imp.com/b"
+        ],
+        "assets": [
+            {
+                "id": 1,
+                "title": {
+                    "text": "InstallBOA"
+                },
+                "link": {
+                    "url": "http: //asset1.am.a/URL"
+                }
+            },
+            {
+                "id": 2,
+                "data": {
+                    "value": "5"
+                }
+            },
+            {
+                "id": 3,
+                "img": {
+                    "url": "http: //cdn.mobad.com/ad.png",
+                    "w": 64,
+                    "h": 64
+                }
+            },
+            {
+                "id": 4,
+                "data": {
+                    "value": "Install"
+                },
+                "link": {
+                    "url": "http: //asset4.am.a/URL"
+                }
+            }
+        ]
+    }
+}

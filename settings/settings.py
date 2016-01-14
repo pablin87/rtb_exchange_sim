@@ -8,6 +8,7 @@ from plugin.adx_plugin import AdxPlugin
 from plugin.mopub_plugin import MopubPlugin
 from plugin.smato_plugin import SmaatoPlugin
 from plugin.pubmatic_plugin import PubmaticPlugin
+from plugin.sharethrough_plugin import SharethroughPlugin
 
 # Max connections for bid requests allowed for the process
 MAX_CONNS = 50
@@ -67,6 +68,7 @@ LOG_LEVEL = logging.INFO
 #PARAMETER_PLUGIN = AdxPlugin
 PARAMETER_PLUGIN = MopubPlugin
 #PARAMETER_PLUGIN = PubmaticPlugin
+#PARAMETER_PLUGIN = SharethroughPlugin
 #PARAMETER_PLUGIN = SmaatoPlugin
 
 # Configuration map that will be passed in the initialize 
@@ -76,12 +78,14 @@ import rubicon_config
 import adx_config
 import smaato_config
 import pubmatic_config
+import sharethrough_config
 #PLUGIN_CONFIG = smaato_config.conf
 PLUGIN_CONFIG = mopub_config.conf
 #PLUGIN_CONFIG = nexage_config.conf
 #PLUGIN_CONFIG = rubicon_config.conf
 #PLUGIN_CONFIG = adx_config.conf
 #PLUGIN_CONFIG = pubmatic_config.conf
+#PLUGIN_CONFIG = sharethrough_config.conf
 
 # RTB request template filename
 TEMPLATE_FILENAME = 'templates/request.template'
