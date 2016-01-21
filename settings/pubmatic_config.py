@@ -18,7 +18,7 @@ conf = {
                                 'plugin/pubmatic/pubmatic_app_1.tmpl',
                                 'plugin/pubmatic/pubmatic_app_1.tmpl',
                                 'plugin/pubmatic/pubmatic_site_1.tmpl',
-                                'pubmatic_body_private_deal_1.tmpl'
+                                'plugin/pubmatic/pubmatic_body_private_deal_1.tmpl'
                                 ],
         
         # This map defines a list of functions that when being called return a 

@@ -13,9 +13,9 @@ conf = {
         'req_body_templates' : [ 
                                 'plugin/mopub/mopub_body1.tmpl', 
                                 'plugin/mopub/mopub_body2.tmpl',
-                                'mopub_body_private_deal_1.tmpl',
-                                'mopub_body_openRTB2.3_1.tmpl',
-                                'mopub_body_native_1.tmpl'
+                                'plugin/mopub/mopub_body_private_deal_1.tmpl',
+                                'plugin/mopub/mopub_body_openRTB2.3_1.tmpl',
+                                'plugin/mopub/mopub_body_native_1.tmpl'
                                 ],
         
         # This map defines a list of functions that when being called return a 
