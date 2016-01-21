@@ -6,11 +6,16 @@ conf = {
         # in the correct path
         'exchange' : 'mopub',
         
+        'openRTB-version' : '2.3',
+        
         # This define the body templates that are being sent to the rtbkit
         # exchange connector endpoint (files).
         'req_body_templates' : [ 
                                 'plugin/mopub/mopub_body1.tmpl', 
-                                'plugin/mopub/mopub_body2.tmpl'
+                                'plugin/mopub/mopub_body2.tmpl',
+                                'mopub_body_private_deal_1.tmpl',
+                                'mopub_body_openRTB2.3_1.tmpl',
+                                'mopub_body_native_1.tmpl'
                                 ],
         
         # This map defines a list of functions that when being called return a 

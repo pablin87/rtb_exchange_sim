@@ -52,7 +52,10 @@ class OpenRTBPlugin(ParameterPlugin):
         self.def_headers['Host'] = 'localhost'
         self.def_headers['Connection'] = 'keep-alive'
         self.def_headers['Content-Type'] = 'application/json'
-        self.def_headers['x-openrtb-version'] = '2.1'
+        if ( 'openRTB-version' in config ):
+            self.def_headers['x-openrtb-version'] = config['openRTB-version']
+        else :
+            self.def_headers['x-openrtb-version'] = '2.1' # default
 
     def get_request(self):
         # We need to return a request line, a map of headers and a body

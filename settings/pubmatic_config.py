@@ -5,6 +5,8 @@ conf = {
         # Value to be expanded when the AUCTION_CLICKTRACK_URL macro is present
         # in the adm.
         'auction_clicktrack_url' : "http://google.com",
+
+        'openRTB-version' : '2.3',
         
         # Name of the exchange being simulated (used to generate notifications)
         # in the correct path
@@ -15,7 +17,8 @@ conf = {
         'req_body_templates' : [ 
                                 'plugin/pubmatic/pubmatic_app_1.tmpl',
                                 'plugin/pubmatic/pubmatic_app_1.tmpl',
-                                'plugin/pubmatic/pubmatic_site_1.tmpl'
+                                'plugin/pubmatic/pubmatic_site_1.tmpl',
+                                'pubmatic_body_private_deal_1.tmpl'
                                 ],
         
         # This map defines a list of functions that when being called return a 
