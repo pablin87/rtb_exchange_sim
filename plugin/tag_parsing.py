@@ -2,6 +2,7 @@ import re
 from BeautifulSoup import BeautifulSoup
 from string import Template
 import json
+import xml.dom.minidom as minidom
 
 # We do this to support ':' inside a macro
 class MacroTemplate(Template):
@@ -53,18 +54,35 @@ def extract_auction_id(html_tag):
     return imp_url.split('/')[3]
 
 def extract_imp_beacons_from_adm(adm):
-    if is_native(adm):
-        jsnative = json.loads(adm)
-        return extract_imp_beacons_from_native(jsnative)
-    else:
-        return extract_imp_beacons_from_html(adm)
+    try :
+        if is_native(adm):
+            jsnative = json.loads(adm)
+            return extract_imp_beacons_from_native(jsnative)
+        elif is_vast(adm):
+            xml_dom = minidom.parseString(adm)
+            return extract_imp_beacons_from_vast(xml_dom)
+        else:
+            return extract_imp_beacons_from_html(adm)
+    except Exception, err:
+        print "Error when extracting impressions from adm %s" % adm 
+        print err
+        raise
+        return []
 
 def extract_click_beacons_from_adm(adm):
-    if is_native(adm):
-        jsnative = json.loads(adm)
-        return extract_click_beacons_from_native(jsnative)
-    else:
-        return extract_click_beacons_from_html(adm)
+    try:
+        if is_native(adm):
+            jsnative = json.loads(adm)
+            return extract_click_beacons_from_native(jsnative)
+        elif is_vast(adm):
+            xml_dom = minidom.parseString(adm)
+            return extract_click_beacons_from_vast(xml_dom)
+        else:
+            return extract_click_beacons_from_html(adm)
+    except Exception, err:
+        print "Error when extracting clicks from adm %s" % adm
+        print err
+        return []
 
 def extract_imp_beacons_from_html(adm):
     '''
@@ -122,3 +140,57 @@ def is_native(adm):
         return native.has_key('native')
     except :
         return False
+
+def is_vast(adm):
+    '''
+    Indicates if the given adm field from an OpenRTB response corresponds
+    to a xml vast ad or not.
+    '''
+    return "VAST" in adm
+
+def extract_imp_beacons_from_vast(vast_xml_dom):
+    '''
+    Extract impression beacons from a native response json.
+    Beacons are extracted from native->imptrackers.
+    '''
+    bcns = []
+    def vals_from_tag(tagname):
+        for elem in vast_xml_dom.getElementsByTagName(tagname):
+            for node in elem.childNodes:
+                n = node.nodeValue.strip()
+                if len(n) > 0: yield n
+    
+    bcns.extend(vals_from_tag("Impression"))
+    
+    # get tracking events with event = start
+    for elem in vast_xml_dom.getElementsByTagName("Tracking"):
+        if ( elem.attributes.has_key("event") and
+             elem.attributes["event"].firstChild.nodeValue == "start" or  
+             elem.attributes["event"].firstChild.nodeValue == "creativeView"
+            ):
+            texts = [node.nodeValue.strip() for node in elem.childNodes]
+            for val in texts :
+                if len(val) > 0:
+                    bcns.append(val)
+    
+    return bcns
+
+def extract_click_beacons_from_vast(vast_xml_dom):
+    '''
+    Extract click beacons from a native response json. Beacons are extracted 
+    from native->link->clicktrackers (parent link object) and from the 
+    clicktrackers of the links objects in the assets.
+    '''
+    bcns = []
+    def vals_from_tag(tagname):
+        for elem in vast_xml_dom.getElementsByTagName(tagname):
+            for node in elem.childNodes:
+                n = node.nodeValue.strip()
+                if len(n) > 0: yield n
+    
+    bcns.extend(vals_from_tag("ClickTracking"))
+    bcns.extend(vals_from_tag("IconClickTracking"))
+    bcns.extend(vals_from_tag("CompanionClickTracking"))
+    bcns.extend(vals_from_tag("NonLinearClickTracking"))
+
+    return bcns
