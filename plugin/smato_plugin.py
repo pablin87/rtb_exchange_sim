@@ -1,6 +1,7 @@
 from openrtb_plugin import OpenRTBPlugin
 from xml.etree import ElementTree 
 import logging
+import tag_parsing as tgp
 
 class SmaatoPlugin(OpenRTBPlugin):
     '''
@@ -13,6 +14,12 @@ class SmaatoPlugin(OpenRTBPlugin):
         self.def_headers['x-openrtb-version'] = '2.0'
 
     def extract_adm_impression_beacons(self, adm):
+        if tgp.is_vast(adm):
+            return tgp.extract_imp_beacons_from_adm(adm)
+        else :
+            return self._extract_adm_impressions(adm)
+    
+    def _extract_adm_impressions(self, adm):
         bcns = []
         try :
             root = ElementTree.fromstring(adm)

@@ -9,7 +9,8 @@ conf = {
         # This define the body templates that are being sent to the rtbkit
         # exchange connector endpoint (files).
         'req_body_templates' : [ 
-                                'plugin/smaato/site1_template.tmpl'
+                                'plugin/smaato/site1_template.tmpl',
+                                'plugin/smaato/video1_template.tmpl'
                                 ],
         
         # This map defines a list of functions that when being called return a 
