@@ -30,6 +30,12 @@ class SmaatoPlugin(OpenRTBPlugin):
         return bcns
     
     def extract_adm_click_beacons(self, adm):
+        if tgp.is_vast(adm):
+            return tgp.extract_click_beacons_from_adm(adm)
+        else :
+            return self._extract_adm_click(adm)        
+    
+    def _extract_adm_click(self, adm):
         return self.__extract_url_from_node(adm, 'clickUrl')
     
     def get_auction_price(self, json_response):
